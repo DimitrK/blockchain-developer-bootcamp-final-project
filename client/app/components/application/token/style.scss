@@ -1,0 +1,18 @@
+$token--border-color: #eaeaea;
+
+.token {
+  padding-bottom: 2rem;
+}
+
+.token__image {
+  display: inline-block;
+  margin: 1rem 0 0 0;
+  max-width: 300px;
+  position: relative;
+  transition: 0.6s;
+}
+
+.token__title {
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}

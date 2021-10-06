@@ -1,0 +1,42 @@
+/*
+  Inspired by http://tobiasahlin.com/spinkit/
+*/
+
+.loading {
+  display: block;
+  position: relative;
+  top: 100px;
+  height: 270px;
+  margin: 0 auto;
+  text-align: center;
+  width: 40px;
+}
+
+.loading__double-bounce1,
+.loading__double-bounce2 {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: skyblue;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+  -webkit-animation: pulse 2.0s infinite ease-in-out;
+  animation: pulse 2.0s infinite ease-in-out;
+}
+
+.loading__double-bounce2 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(0);
+  }
+
+  50% {
+    transform: scale(1);
+  }
+}

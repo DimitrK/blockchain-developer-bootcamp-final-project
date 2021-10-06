@@ -1,0 +1,27 @@
+{
+  "extends": "../.babelrc",
+  "presets": ["@babel/preset-react"],
+  "plugins": [
+    "react-hot-loader/babel",
+    [
+      "babel-plugin-root-import",
+      {
+        "paths": {
+          "rootPathSuffix": "./app",
+          "rootPathPrefix": "@"
+        }
+      }
+    ],
+    [
+      "react-css-modules",
+      {
+        "generateScopedName": "[path][name]__[local]",
+        "filetypes": {
+          ".scss": {
+            "syntax": "postcss-scss"
+          }
+        }
+      }
+    ]
+  ]
+}

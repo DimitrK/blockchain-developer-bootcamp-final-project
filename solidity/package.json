@@ -1,0 +1,34 @@
+{
+  "name": "@athens/solidity",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "lint": "solhint contracts/**/*.sol",
+    "build": "truffle compile && truffle migrate",
+    "start": "node ./scripts/runner ./scripts/ganache.sh",
+    "dev": "truffle develop",
+    "test": "truffle test"
+  },
+  "main": "truffle.js",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git"
+  },
+  "keywords": [],
+  "devDependencies": {
+    "@babel/polyfill": "7.12.1",
+    "@babel/register": "7.15.3",
+    "@openzeppelin/contracts": "^4.3.2",
+    "dotenv": "10.0.0",
+    "ganache-cli": "6.12.2",
+    "truffle": "5.4.12",
+    "truffle-deployer": "3.0.32"
+  },
+  "dependencies": {
+    "solhint": "^3.3.6",
+    "truffle-hdwallet-provider": "1.0.17",
+    "web3": "1.5.3"
+  }
+}
