@@ -11,7 +11,10 @@
     "lint": "yarn workspaces run lint",
     "build": "yarn workspaces run build",
     "start": "yarn workspaces run start",
-    "test": "yarn workspaces run test"
+    "test": "yarn workspaces run test",
+    "dotenv:pull": "yarn workspaces run dotenv:pull",
+    "dotenv:push": "yarn workspaces run dotenv:push",
+    "dotenv": "yarn workspaces run dotenv"
   },
   "author": "Athens DAO",
   "license": "MIT",
@@ -48,6 +51,7 @@
     "lodash.range": "^3.2.0"
   },
   "dependencies": {
-    "@babel/runtime": "^7.15.4"
+    "@babel/runtime": "^7.15.4",
+    "@dotenv/cli": "^0.4.1"
   }
 }

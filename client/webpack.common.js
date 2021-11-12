@@ -14,6 +14,9 @@ const indexName = getIndexHtmlName(process.env.NODE_ENV);
 const babelModeSuffix = isEsm() ? 'esm' : 'cjs';
 // const LavaMoatPlugin = require('lavamoat-webpack');
 const dist = path.resolve(__dirname, 'dist', babelModeSuffix);
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const getLocalIdent = require('css-loader/lib/getLocalIdent');
+
 
 module.exports = {
   entry: ['@babel/polyfill', './index.js'],
@@ -23,9 +26,6 @@ module.exports = {
   },
   resolve: {
     extensions: ['.scss', '.css', '.js', '.jsx', '.json'],
-    alias: {
-      'react-dom': '@hot-loader/react-dom',
-    },
     fallback: {
       http: 'stream-http',
       https: 'https-browserify',
@@ -34,6 +34,13 @@ module.exports = {
       stream: 'stream-browserify',
       Buffer: 'buffer',
     },
+    plugins: [
+      new TsconfigPathsPlugin({
+        configFile: path.resolve(__dirname, './tsconfig.json'),
+        extensions: [".js", ".jsx", ".ts"],
+        baseUrl: path.resolve(__dirname, '.')
+      })
+    ]
   },
   plugins: [
     createHtmlWebpackPlugin(),
@@ -46,6 +53,8 @@ module.exports = {
       __COMMIT_HASH__: JSON.stringify(git.commithash() || 'NA'),
       __ENV__: JSON.stringify(process.env.NODE_ENV),
       __ROLLBAR_ACCESS_TOKEN__: JSON.stringify(process.env.ROLLBAR_ACCESS_TOKEN),
+      __MOVIEDB_API_KEY__: JSON.stringify(process.env.MOVIEDB_API_KEY),
+      __MOVIEDB_API_URL__: JSON.stringify(process.env.MOVIEDB_API_URL)
     }),
     new Dotenv(),
     new webpack.ProvidePlugin({
@@ -73,7 +82,7 @@ module.exports = {
         use: ['file-loader?name=[name].[ext]'],
       },
       {
-        test: /\.scss$/,
+        test: /\.s?css$/,
         use: [
           {
             loader: 'style-loader',
@@ -85,7 +94,12 @@ module.exports = {
               import: true,
               importLoaders: 1,
               camelCase: true,
-              localIdentName: '[path][name]__[local]'
+              localIdentName: '[path][name]__[local]',
+              getLocalIdent: (loaderContext, localIdentName, localName, options) => {
+                return loaderContext.resourcePath.includes('antd') ?
+                  localName :
+                  getLocalIdent(loaderContext, localIdentName, localName, options);
+              }
             },
           },
           {
@@ -105,27 +119,36 @@ module.exports = {
           {
             loader: 'sass-loader',
             options: {
-              sourceMap: true,
-              includePaths: [path.join(__dirname, 'app/styles')],
+              sourceMap: true
             },
           },
         ],
       },
+      // {
+      //   test: /\.(js|jsx)$/,
+      //   exclude: /node_modules/,
+      //   use: 'babel-loader',
+      // },
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: 'babel-loader',
-      },
-      {
-        test: /\.node$/,
-        use: 'node-loader',
-      },
+        loader: 'esbuild-loader',
+        options: {
+          target: 'es2015',  // Syntax to compile to (see options below for possible values)
+          loader: 'jsx',
+          implementation: require('esbuild')
+        }
+      }
     ],
   },
   devServer: {
-    stats: 'minimal',
-    contentBase: dist,
-    historyApiFallback: true
+    historyApiFallback: true,
+    client: {
+      overlay: {
+        errors: true,
+        warnings: false
+      }
+    }
   },
   watchOptions: {
     ignored: /node_modules/

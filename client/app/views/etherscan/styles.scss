@@ -1,0 +1,20 @@
+.abiFormWizard {
+  padding: 16px;
+  background-color: rgb(252, 252, 252);
+
+  aside,
+  section {
+    padding: 16px;
+    text-align: left;
+  }
+
+  footer {
+    text-align: right;
+  }
+
+  section,
+  section > *,
+  aside {
+    background-color: rgb(252, 252, 252);
+  }
+}

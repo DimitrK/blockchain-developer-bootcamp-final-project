@@ -1,0 +1,1 @@
+export const $reactHookForm = Symbol('react-hook-form');

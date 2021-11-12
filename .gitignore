@@ -104,3 +104,7 @@ dist
 .tern-port
 
 .ganache
+# Ignore (and don't ignore) for dotenv.
+.env
+.env.me
+!.env.project

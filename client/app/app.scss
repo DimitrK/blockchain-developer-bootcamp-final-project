@@ -1,5 +1,5 @@
 @charset "utf-8";
-@import "~bulma/bulma";
+@import '~antd/dist/antd.css';
 @import './styles/responsive-type.scss';
 @import './styles/variables/fonts.scss';
 @import './styles/variables/font-weights.scss';
@@ -29,5 +29,9 @@ body {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
+}
+
+:global(.text-center) {
+  text-align: center;
 }
 

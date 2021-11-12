@@ -18,6 +18,11 @@ module.exports = merge({
       timeout: 2
     }),
   ],
+  resolve: {
+    alias: {
+      'react-dom': '@hot-loader/react-dom',
+    },
+  },
   optimization: {
     moduleIds: 'named',
     minimize: false

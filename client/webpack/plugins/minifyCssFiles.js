@@ -14,4 +14,4 @@ const minifyCssFiles = () =>
   });
 
 
-export default minifyCssFiles;
+module.exports = minifyCssFiles;

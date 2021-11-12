@@ -1,37 +1,42 @@
-import React from 'react';
+import React, {useState, useCallback} from 'react';
 import {hot} from 'react-hot-loader/root';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
-import simpleStorage from '@/contracts/simpleStorageFactory';
-import Header from '@/components/layout/header';
-import Footer from '@/components/layout/footer';
-import Landing from '@/components/landing';
-import NotFoundPage from '@/components/not-found';
-import useWalletAccount from './useWalletAccount';
-import './app.scss';
+import simpleStorage from './contracts/simpleStorageFactory';
+import Header from './views/layout/header';
+import Footer from './views/layout/footer';
+import Landing from './views/landing';
+import NotFoundPage from './views/not-found';
+import useWalletAccount from '@/shared/hooks/useWalletAccount';
+import styles from './app.scss';
+import {Layout} from 'antd';
+const {Content} = Layout;
 
 const App = () => {
-  const account = useWalletAccount();
+  const {account, error} = useWalletAccount();
   if (account) {
     window.web3.eth.defaultAccount = account;
   } else {
     return null;
   }
+
   return (
-    <div styleName='app'>
-      <BrowserRouter styleName="root">
-        <Route path="/:active?" component={Header} />
+    <div className={styles.app}>
+      <BrowserRouter className={styles.root}>
+        <Layout>
+          <Route path="/:active?" component={Header} />
 
-        <main>
-          <Switch>
-            <Route exact={true} path="/" component={Landing} />
-            <Route component={NotFoundPage} />
-          </Switch>
-        </main>
+          <Content>
+            <Switch>
+              <Route exact={true} path="/" component={Landing} />
+              <Route component={NotFoundPage} />
+            </Switch>
+          </Content>
 
-        <Footer />
+          <Footer />
+        </Layout>
       </BrowserRouter>
     </div>
   );
 };
 
-export default hot(App);
+export default App;

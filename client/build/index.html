@@ -1,0 +1,37 @@
+<!doctype html><html dir="ltr" lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="description" content="Sample app"/><meta property="og:title" content="Sample app"/><meta property="og:description" content="Sample app"/><link rel="canonical" href="[ENV_PUBLIC_URL]"/><link rel="preconnect" href="[ENV_CDN_URL]"/><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous"/><link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet"/><style>@keyframes loaderFirstType {
+        from {
+          fill: #eff1f2;
+          stroke-dasharray: 360;
+          stroke-dashoffset: -360;
+        }
+        to {
+          fill: #8f9bb3;
+          stroke-dasharray: 360;
+          stroke-dashoffset: 0;
+        }
+      }
+      @keyframes loaderLastType {
+        from {
+          fill: #eff1f2;
+          stroke-dasharray: 458;
+          stroke-dashoffset: 458;
+        }
+        to {
+          fill: #8f9bb3;
+          stroke-dasharray: 458;
+          stroke-dashoffset: 0;
+        }
+      }
+      .initialLoader {
+        display: flex;
+        justify-content: center;
+      }
+      .initialLoader svg {
+        margin-top: 250px;
+        overflow: visible;
+      }
+
+      .initialLoader svg path,
+      .initialLoader svg rect  {
+        animation: loaderFirstType 5s infinite;
+      }</style><meta name="version" content="v0.0.1"><script defer="defer" src="app.js"></script></head><body><div id="application"><div class="initialLoader"><svg height="74px" viewBox="0 0 64 64" width="74px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd"><g><g><g><g><g><g><g><path d="M32,59C17.112,59,5,46.888,5,32S17.112,5,32,5s27,12.112,27,27S46.888,59,32,59z M32,6          C17.663,6,6,17.663,6,32s11.663,26,26,26s26-11.663,26-26S46.337,6,32,6z" fill="#37474F" stroke="#8F9BB3"/></g></g></g></g><g><g><g><g><path d="M32,55C19.317,55,9,44.683,9,32S19.317,9,32,9s23,10.317,23,23S44.683,55,32,55z M32,10          c-12.131,0-22,9.869-22,22s9.869,22,22,22s22-9.869,22-22S44.131,10,32,10z" fill="#37474F"/></g></g></g></g></g></g></g><g><g><g><g><g><path d="M31.997,15.52l9.929,16.475l-9.929,5.869l-9.93-5.869L31.997,15.52L31.997,15.52z M31.997,13.582        L20.69,32.342l11.307,6.683l11.306-6.683L31.997,13.582L31.997,13.582z" fill="#37474F"/></g></g></g></g><g><g><g><g><path d="M31.997,28.667l9.086,3.825l-9.086,5.371l-9.087-5.371L31.997,28.667L31.997,28.667z M31.997,27.582        l-11.307,4.76l11.307,6.683l11.306-6.683L31.997,27.582L31.997,27.582z" fill="#37474F"/></g></g></g></g><g><g><g><g><path d="M39.778,37.732l-7.78,10.957l-7.776-10.957l7.267,4.294l0.509,0.3l0.508-0.3L39.778,37.732        L39.778,37.732z M43.311,34.485l-11.313,6.68l-11.306-6.68L32,50.416v0.002L43.311,34.485L43.311,34.485z" fill="#37474F"/></g></g></g></g></g><g><g><g><rect fill="#37474F" height="22.792" width="1" x="31.5" y="15.461"/></g></g></g><g><g><g><rect fill="#37474F" height="7.874" width="1" x="31.5" y="41.337"/></g></g></g></g></svg></div></div></body></html>
