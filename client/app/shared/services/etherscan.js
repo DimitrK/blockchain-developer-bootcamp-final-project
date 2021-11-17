@@ -18,3 +18,8 @@ const etherScanClient = async (query, abortController = {}) => {
 export const getAbi = (path, address, controller) => {
   return etherScanClient({action: 'getabi', address, module: 'contract'}, controller);
 };
+
+export const getGasPrice = (controller) => {
+  return etherScanClient({action: 'gasoracle', module: 'gastracker'}, controller);
+}
+

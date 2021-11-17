@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import GetNetworkNameService from '@/services/get-network-name-service'
 
 import Address from '@/components/address'
-import Ether from '@/views/ether'
+import Ether from '@/shared/components/ether'
 
 import AvatarPlaceholderImage from '@/images/avatar-placeholder.png'
 

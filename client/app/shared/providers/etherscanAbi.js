@@ -25,9 +25,9 @@ export const EtherscanAbiProvider = ({children, value = []}) => {
 
 export const useEtherscanAbi = () => {
   const context = useContext(EtherscanAbiValueContext);
-  // if (context === undefined) {
-  //   throw new Error('useAbiState should be wrapped inside a EtherscanAbiValueContext');
-  // }
+  if (context === undefined) {
+    throw new Error('useAbiState should be wrapped inside a EtherscanAbiValueContext');
+  }
   return context;
 };
 

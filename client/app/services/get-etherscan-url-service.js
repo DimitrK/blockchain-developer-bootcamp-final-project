@@ -22,7 +22,7 @@ const GetEtherscanUrlService = () => {
       etherscanUrl = 'https://kovan.etherscan.io';
       break;
     default:
-      etherscanUrl = '';
+      etherscanUrl = 'https://etherscan';
   }
 
   return etherscanUrl;

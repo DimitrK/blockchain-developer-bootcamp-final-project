@@ -1,6 +1,7 @@
-pragma solidity ^0.8.0;
+//SPDX-License-Identifier: MIT
+pragma solidity 0.8.9;
 
-contract Migrations {
+contract Migrations  {
   address public owner;
   uint public last_completed_migration;
 
@@ -8,7 +9,7 @@ contract Migrations {
     if (msg.sender == owner) _;
   }
 
-  constructor() public {
+  constructor() {
     owner = msg.sender;
   }
 

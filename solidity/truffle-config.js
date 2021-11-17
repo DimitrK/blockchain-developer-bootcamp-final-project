@@ -11,10 +11,13 @@ const mnemonic = process.env.HDWALLET_MNEMONIC;
 module.exports = {
   compilers: {
     solc: {
-      version: '0.8.6',
+      version: '0.8.9',
     },
   },
   contracts_build_directory: path.join(__dirname, '../client/app/contracts'),
+  etherscan: {
+    apiKey: process.env.ETHERSCAN_API_KEY
+  },
   networks: {
     ropsten: {
       provider: new HDWalletProvider(
@@ -35,9 +38,11 @@ module.exports = {
       gasPrice: 100000000000,
     },
     development: {
-      host: '127.0.0.1',
+      host: 'localhost',
       port: 8545,
-      network_id: '1234', // Match any network id
+      network_id: '*', // Match any network id
+      gasPrice: 134000000000,
+      gas: 4612388
     },
   },
 };

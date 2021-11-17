@@ -54,6 +54,8 @@ const AbiForm = () => {
     <EtherscanAbiProvider>
       <FormProvider {...methods}>
         <form noValidate onSubmit={methods.handleSubmit(onSubmit)}>
+          <p>Standard: 0x879a5031823942b52c0f0a770d97235e6227da34</p>
+          <p>Payable: 0x5969c6afdf69ebf671f46ced3461d55969deef3c</p>
           <Layout className={styles.abiFormWizard}>
             <Layout>
               <Content>

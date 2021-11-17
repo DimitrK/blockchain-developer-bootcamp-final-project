@@ -1,20 +1,21 @@
 import React, {useState, useCallback, useEffect, forwardRef} from 'react';
 import {InputNumber, Input, Select} from 'antd';
+import ether from '@/shared/helpers/ether';
 import {$reactHookForm} from '../symbols';
 const {Option} = Select;
 const noop = _ => _;
 
 const UnitSelect = (props) => (
   <Select {...props} defaultValue="wei" className="select-after">
-    <Option value="18">ether</Option>
-    <Option value="9">gwei</Option>
-    <Option value="0">wei</Option>
+    <Option value={ether.units.ETH}>ether</Option>
+    <Option value={ether.units.GWEI}>gwei</Option>
+    <Option value={ether.units.WEI}>wei</Option>
   </Select>
 );
 
 const EtherInput = forwardRef(({placeholder = '1', defaultValue, value: _value, onChange = noop, ...props}, ref) => {
   const [value, setValue] = useState(defaultValue || _value);
-  const [unit, setUnit] = useState('0');
+  const [unit, setUnit] = useState(ether.units.WEI);
 
   const handleValueChange = useCallback(e => {
     setValue(e.target.value);
@@ -31,7 +32,7 @@ const EtherInput = forwardRef(({placeholder = '1', defaultValue, value: _value, 
 
     onChange({
       target: {
-        value: `${(Number(value) * 10 ** Number(unit))}`
+        value: `${ether(value, unit).to.wei()}`
       }
     });
   }, [unit, value, _value]);

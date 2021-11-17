@@ -5,6 +5,7 @@
   "scripts": {
     "lint": "solhint contracts/**/*.sol",
     "build": "truffle compile && truffle migrate",
+    "deploy:ropsten": "truffle compile && truffle migrate --network ropsten",
     "start": "node ./scripts/runner ./scripts/ganache.sh",
     "dev": "truffle develop",
     "test": "truffle test",
@@ -24,6 +25,7 @@
     "@babel/polyfill": "7.12.1",
     "@babel/register": "7.15.3",
     "@openzeppelin/contracts": "^4.3.2",
+    "@openzeppelin/test-helpers": "^0.5.15",
     "dotenv": "10.0.0",
     "ganache-cli": "6.12.2",
     "truffle": "5.4.12",
