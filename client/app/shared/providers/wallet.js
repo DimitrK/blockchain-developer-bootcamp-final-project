@@ -21,8 +21,8 @@ function connect(handleAccountsChanged, handleAccountFailed, ethereum) {
 }
 
 export const WalletProvider = ({children}) => {
-  const provs = useEthProviders();
-  const {ethereum, web3} = provs;
+  const providers = useEthProviders();
+  const {ethereum, web3} = providers;
   const [account, setAccount] = useState();
   const [error, setError] = useState();
   const [balance, setBalance] = useState();
@@ -88,7 +88,7 @@ export const WalletProvider = ({children}) => {
   const actions = useMemo(
     () => ({
       connect: () => {
-        !wallet && connect(handleAccountsChanged, setError, ethereum);
+        !account && connect(handleAccountsChanged, setError, ethereum);
       },
       balance,
       wallet: account,
