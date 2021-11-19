@@ -20,6 +20,9 @@ function connect(handleAccountsChanged, handleAccountFailed, ethereum) {
     });
 }
 
+/**
+  Wallet provider observers wallet changes and manages wallet updates
+ */
 export const WalletProvider = ({children}) => {
   const providers = useEthProviders();
   const {ethereum, web3} = providers;
@@ -48,14 +51,19 @@ export const WalletProvider = ({children}) => {
   }, [handleAccountsChanged, ethereum]);
 
 
-  // First page run, in case a wallet is already connected
+  /**
+    First page run, check if a wallet is already connected then update the app state of the account
+   */
   useEffect(() => {
     if (ethereum.isConnected()) {
       ethereum.request({method: 'eth_accounts'}).then(handleAccountsChanged);
     }
   }, []);
 
-  // hook
+
+  /**
+    Hook which listens to user wallet changes and updates the account
+   */
   useEffect(() => {
     if (ethereum && !account) {
       ethereum.on('accountsChanged', handleAccountsChanged);
@@ -65,6 +73,10 @@ export const WalletProvider = ({children}) => {
 
   }, [account, handleAccountsChanged, handleConnected, ethereum]);
 
+  /**
+  Setting up subscription to listen for update on accounts's balance, skips if the subscription is already set.
+  Also checks if user wallet got disconnected and unsubscribes any active subscription
+  */
   useEffect(() => {
     if (!account) {
       setBalance(undefined);
@@ -85,6 +97,9 @@ export const WalletProvider = ({children}) => {
       });
   }, [web3, account, subscription]);
 
+  /**
+  Actions and state exposed to the rest of the components within this context
+   */
   const actions = useMemo(
     () => ({
       connect: () => {
