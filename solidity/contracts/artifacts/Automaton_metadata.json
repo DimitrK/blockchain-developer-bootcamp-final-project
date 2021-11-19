@@ -95,6 +95,12 @@
 						"internalType": "address",
 						"name": "creator",
 						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "minion",
+						"type": "address"
 					}
 				],
 				"name": "MinionRegistered",
@@ -371,16 +377,6 @@
 					},
 					{
 						"internalType": "uint256",
-						"name": "estimatedGas",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "gas",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
 						"name": "gasPrice",
 						"type": "uint256"
 					},
@@ -528,11 +524,11 @@
 			]
 		},
 		"Automaton.sol": {
-			"keccak256": "0xd220caffc12ccd1fa205fdef7d49ac0cdd17fb5d278a46ce36e005ad1309cbac",
+			"keccak256": "0x38affbc704a380e98f386446033ac1ce3a2e3afed4432bc67b63fe33f4578a12",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://5f98b74608ea916d56f0e197b297ff1fc0e8f8f276d8046d99b97400aab6d21b",
-				"dweb:/ipfs/QmagRrfTMi8GDwZSgWEZLxCnDNC8LS1sFfkQhMwwFAPEEJ"
+				"bzz-raw://84ff6ae9dcf6a9c327cb29be724637bb9903928767de6d9279153e6d3dee961f",
+				"dweb:/ipfs/QmRcZy1G25JLihW5f5ezEvF9JomqiBN6z1gybqtMz74fXh"
 			]
 		},
 		"AutomatonMinion.sol": {
