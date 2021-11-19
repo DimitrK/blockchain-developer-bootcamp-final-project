@@ -104,7 +104,7 @@ contract Automaton is Ownable, ReentrancyGuard, Pausable {
     Address.sendValue(payable(automation.minion), amount);
     automation.state = State.Forwarded;
     emit AutomationValueForwarded(automation.minion, _autoId, amount);
-    require(address(this).balance > startBalance.sub(msg.value));
+    require(address(this).balance.add(fee)>= startBalance.sub(msg.value));
   }
 
   function setupAutomation(address target, uint amount, uint gasPrice, bytes memory data) public payable nonReentrant returns (uint) {
