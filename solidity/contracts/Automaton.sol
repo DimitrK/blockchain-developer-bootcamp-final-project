@@ -84,16 +84,15 @@ contract Automaton is Ownable, ReentrancyGuard, Pausable {
     }
   }
 
-  function _registerMinion() internal returns (address minion) {
+  function _getOrRegisterMinion() internal returns (address minion) {
     if (clientForMinion[msg.sender] == address(0)) {
       AutomatonMinion _minion = new AutomatonMinion();
       clientForMinion[msg.sender] = address(_minion);
       _minion.register(address(this), msg.sender);
+      emit MinionRegistered(address(this), minion);
     }
 
     minion = clientForMinion[msg.sender];
-
-    emit MinionRegistered(address(this), minion);
   }
 
 
@@ -124,7 +123,7 @@ contract Automaton is Ownable, ReentrancyGuard, Pausable {
       revert('insufficient stipend+transfer gas');
     }
 
-    address minion = _registerMinion();
+    address minion = _getOrRegisterMinion();
     autoId++;
     automations[autoId] = Automation({
       creator: msg.sender,
