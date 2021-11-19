@@ -1,24 +1,23 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Link} from 'react-router-dom';
 import Hero from '@/views/hero';
 import AbiForm from '@/views/etherscan';
+import {useEthInfo} from '@/shared/providers/ethereum';
 
-export default class Landing extends Component {
-  render() {
-    return (
-      <Hero>
-        <div className="columns">
-          <div className="column is-two-thirds">
-            <Link to="/tokens/new" className="button is-info is-large">
-              <span>Buy a Token Now</span>
-            </Link>
-          </div>
 
-          <div className="column">
-            <AbiForm/>
-          </div>
+const Landing = (props) => {
+  const {version, network} = useEthInfo();
+  return (
+    <Hero>
+      <div className="columns">
+        <div className="column is-two-thirds">
         </div>
-      </Hero>
-    );
-  }
-}
+        <div className="column">
+          <AbiForm/>
+        </div>
+      </div>
+    </Hero>
+  );
+};
+
+export default Landing;

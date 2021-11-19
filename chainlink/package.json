@@ -1,0 +1,39 @@
+{
+  "name": "@athens/chainlink",
+  "version": "1.0.0",
+  "description": "This project contains tooling for Chainlink local development.",
+  "scripts": {
+    "chainlink:logs": "docker logs chainlink-dev",
+    "chainlink:start": "./chainlink/start-cl.sh",
+
+    "remix:chainlink": "npx remixd -s ./node_modules/chainlink/contracts --remix-ide https://remix.ethereum.org",
+    "remix:truffle": "npx remixd -s ./truffle/contracts --remix-ide https://remix.ethereum.org",
+
+    "start": "truffle migrate && npm run chainlink:start",
+    "stop": "docker rm -f chainlink-dev",
+    "test": "truffle test",
+
+    "truffle:fund-client": " truffle exec ./scripts/fund-client.js --network development && cd ..",
+    "truffle:init-setup": "npm run truffle:fund-client && npm run truffle:prep-node",
+    "truffle:migrate-ganache": "cd ./truffle/ && npx truffle migrate --network development && cd ..",
+    "truffle:prep-node": "truffle exec ./scripts/prep-node.js --network development && cd ..",
+    "truffle:test": "truffle test && cd .."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danforbes/chainlink-dev.git"
+  },
+  "author": "Dan Forbes <dan@danforbes.dev>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danforbes/chainlink-dev/issues"
+  },
+  "homepage": "https://github.com/danforbes/chainlink-dev#readme",
+  "devDependencies": {
+    "truffle": "5.4.12"
+  },
+  "dependencies": {
+    "@chainlink/contracts": "0.2.2",
+    "link_token": "1.0.6"
+  }
+}

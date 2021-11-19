@@ -29,7 +29,7 @@ contract Automaton is Ownable, ReentrancyGuard, Pausable {
     bytes data;
     uint gasLimit;
     uint gasCost;
-    uint value;
+    uint amount;
     State state;
   }
 
@@ -45,7 +45,7 @@ contract Automaton is Ownable, ReentrancyGuard, Pausable {
   event AutomationCreated(address indexed creator, uint automationId);
   event AutomationFailed(address indexed creator, uint automationId);
   event AutomationCompleted(address indexed creator, uint automationId);
-  event AutomationValueForwarded(address indexed minion, uint automationId, uint value);
+  event AutomationValueForwarded(address indexed minion, uint automationId, uint amount);
   event Received(address indexed sender, uint amount);
 
   fallback() external payable {
@@ -96,20 +96,22 @@ contract Automaton is Ownable, ReentrancyGuard, Pausable {
     emit MinionRegistered(minion);
   }
 
-  function setupAutomation(address target, uint value, uint gas, uint gasPrice, bytes memory data) public payable nonReentrant returns (uint) {
+  function setupAutomation(address target, uint amount, uint gasPrice, bytes memory data) public payable nonReentrant returns (uint) {
+    require(target != address(0), 'invalid address');
+    require(msg.value > 0, 'insufficient funds');
+    require(gasPrice > 1, 'wrong gas price');
+    require(target != address(this), 'invalid calling self');
+
     uint stipendGas = 2300;
     uint transferGas = 21000;
-    uint totalGasCost = gas.add(stipendGas);
-    if (value > 0) {
-      totalGasCost.add(transferGas);
+    uint carriedGasCost = msg.value.sub(fee).sub(amount);
+    uint carriedGas = carriedGasCost.div(gasPrice, 'overflow');
+    require(carriedGas > 0, 'insufficient gas');
+    require(carriedGas >= stipendGas, 'insufficient stipend gas');
+    if (amount > 0 && carriedGas < stipendGas.add(transferGas)) {
+      revert('insufficient stipend+transfer gas');
     }
 
-    require(gasPrice > 1, 'wrong gas price');
-    require(totalGasCost.mul(gasPrice).add(fee).add(value) <= msg.value, 'insufficient funds');
-    require(target != address(0), 'invalid address');
-    require(target != address(this), 'invalid calling self');
-    require(gas > 0, 'gas is required');
-    require(gas > 25000, 'gass too low'); //??? Verify tx cost
     address minion = _registerMinion();
     autoId++;
     automations[autoId] = Automation({
@@ -117,9 +119,9 @@ contract Automaton is Ownable, ReentrancyGuard, Pausable {
       target: target,
       minion: minion,
       data: data,
-      gasLimit: gas,
-      gasCost: totalGasCost.mul(gasPrice),
-      value: value,
+      gasLimit: carriedGas,
+      gasCost: carriedGasCost,
+      amount: amount,
       state: State.Open
     });
 
@@ -132,14 +134,14 @@ contract Automaton is Ownable, ReentrancyGuard, Pausable {
     return autoId;
   }
 
-  function forwardAutomationValue(uint _autoId, uint value) internal {
-    require(msg.value > value, 'not enought ether send to satisfy this action');
-    require(value >= 0);
+  function forwardAutomationValue(uint _autoId, uint amount) internal {
+    require(msg.value > amount, 'not enought ether send to satisfy this action');
+    require(amount >= 0);
     uint startBalance = address(this).balance;
     Automation storage automation = automations[_autoId];
-    Address.sendValue(payable(automation.minion), value);
+    Address.sendValue(payable(automation.minion), amount);
     automation.state = State.Forwarded;
-    emit AutomationValueForwarded(automation.minion, _autoId, value);
+    emit AutomationValueForwarded(automation.minion, _autoId, amount);
     require(address(this).balance > startBalance - msg.value);
   }
 
@@ -149,7 +151,7 @@ contract Automaton is Ownable, ReentrancyGuard, Pausable {
       target: automation.target,
       data: automation.data,
       gas: automation.gasCost,
-      value: automation.value
+      value: automation.amount
     });
 
     if (executed) {

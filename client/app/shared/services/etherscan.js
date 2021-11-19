@@ -1,5 +1,6 @@
 import config from '@/config';
 import serializeResponse from '@/shared/helpers/serializeResponse';
+import getEtherscanApiUrl from '@/shared/helpers/network/getEtherscanApiUrl';
 
 const etherScanClient = async (query, abortController = {}) => {
   const url = process.env.ETHERSCAN_API_URL;

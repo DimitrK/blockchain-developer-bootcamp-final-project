@@ -6,14 +6,6 @@ const EtherscanAbiSetterContext = createContext();
 export const EtherscanAbiProvider = ({children, value = []}) => {
   const [state, setState] = useState(value);
 
-  // const update = useMemo(() => ({
-  //   setEtherscanAbi: newAbi => setState(newAbi)
-  // }), [])
-
-  // useEffect(() => {
-  //   setState(abi);
-  // }, [abi]);
-
   return (
     <EtherscanAbiValueContext.Provider value={state}>
       <EtherscanAbiSetterContext.Provider value={setState}>

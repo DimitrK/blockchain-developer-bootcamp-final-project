@@ -6,6 +6,7 @@
     "lint": "solhint contracts/**/*.sol",
     "build": "truffle compile && truffle migrate",
     "deploy:ropsten": "truffle compile && truffle migrate --network ropsten",
+    "remix:truffle": "npx @remix-project/remixd -s ./contracts --remix-ide https://remix.ethereum.org",
     "start": "node ./scripts/runner ./scripts/ganache.sh",
     "dev": "truffle develop",
     "test": "truffle test",

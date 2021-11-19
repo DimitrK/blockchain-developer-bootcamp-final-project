@@ -1,12 +1,12 @@
-import { useEffect, useState, useMemo, useCallback } from 'react';
+import {useEffect, useState, useMemo, useCallback} from 'react';
 import logger from '@/shared/logger';
 import Web3 from 'web3';
 
 function connect(handleAccountsChanged, handleAccountFailed) {
   ethereum
-    .request({ method: 'eth_requestAccounts' })
+    .request({method: 'eth_requestAccounts'})
     .then(handleAccountsChanged)
-    .catch((err) => {
+    .catch(err => {
       if (err.code === 4001) {
         // EIP-1193 userRejectedRequest error
         // If this happens, the user rejected the connection request.
@@ -18,46 +18,40 @@ function connect(handleAccountsChanged, handleAccountFailed) {
     });
 }
 
-const useWalletAccount = () => {
+const useWalletAccount = (ethereum) => {
   const [account, setAccount] = useState();
   const [error, setError] = useState();
 
-  window.web3 = useMemo(() => new Web3(Web3.givenProvider), []);
+  const handleAccountsChanged = useCallback(
+    accounts => {
+      if (!ethereum.isConnected() || accounts.length === 0) {
+        setAccount(undefined);
+      }
 
-  const handleAccountsChanged = useCallback((accounts) => {
-    if (!ethereum.isConnected() || accounts.length === 0) {
-      setAccount(undefined);
-    }
+      if (accounts[0] !== account) {
+        setAccount(accounts[0]);
+      }
 
-    if (accounts[0] !== account) {
-      setAccount(accounts[0]);
-      // Do any other work!
-    }
-
-    setError(undefined);
-  }, [account]);
+      setError(undefined);
+    },
+    [account]
+  );
 
   const handleConnected = useCallback(() => {
-    ethereum.request({ method: 'eth_accounts' })
-      .then(handleAccountsChanged);
+    ethereum.request({method: 'eth_accounts'}).then(handleAccountsChanged);
   }, [handleAccountsChanged]);
-
-  const handleChainChanged = (_chainId) => {
-    window.location.reload();
-  }
 
   useEffect(() => {
     if (!account) {
       ethereum.on('accountsChanged', handleAccountsChanged);
-      ethereum.on('chainChanged', handleChainChanged);
       ethereum.on('disconnect', handleAccountsChanged);
       ethereum.on('connect', handleConnected);
       connect(handleAccountsChanged, setError);
     }
-  }, [account, handleAccountsChanged])
+  }, [account, handleAccountsChanged]);
 
   return {account, error};
-}
+};
 
 export default useWalletAccount;
 
@@ -69,5 +63,5 @@ export default useWalletAccount;
 //   }
 //   ]}
 
-//   return web3 = new 
+//   return web3 = new
 // }

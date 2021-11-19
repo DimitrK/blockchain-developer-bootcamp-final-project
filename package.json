@@ -3,7 +3,8 @@
   "private": true,
   "workspaces": [
     "client",
-    "solidity"
+    "solidity",
+    "chainlink"
   ],
   "version": "0.0.1",
   "description": "Ethereum boilerplate. Solidity, Webpack, React",

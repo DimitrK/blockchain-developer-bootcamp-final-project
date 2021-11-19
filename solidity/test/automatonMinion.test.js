@@ -3,6 +3,7 @@ import {constants} from '@openzeppelin/test-helpers';
 const {ZERO_BYTES32, ZERO_ADDRESS} = constants;
 const AutomatonMinion = artifacts.require('../contracts/AutomatonMinion.sol');
 const SimpleStorage = artifacts.require('../contracts/SimpleStorage.sol');
+const LinkToken = artifacts.require('../../chainlink/contracts/LinkToken.sol');
 const BN = web3.utils.BN;
 
 const getAbiDefinition = (contract, matcher = {}) => {
@@ -130,6 +131,10 @@ contract('AutomatonMinion', accounts => {
       catchRevert(catchNotEnoughFunds, 'Minion: insufficient balance');
       assert.equal(await simpleStorage.storedData.call(), 0, 'the value should not be set');
       assert.equal(simpleBalance, 0, 'there should be no ether');
+    })
+
+    it('shows link', () => {
+      console.log({LinkToken})
     })
   });
 });

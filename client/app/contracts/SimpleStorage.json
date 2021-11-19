@@ -12,7 +12,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -38,7 +39,8 @@
       "name": "pay",
       "outputs": [],
       "stateMutability": "payable",
-      "type": "function"
+      "type": "function",
+      "payable": true
     },
     {
       "inputs": [],
@@ -51,7 +53,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.8.9+commit.e5eed63a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"get\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"x\",\"type\":\"uint256\"}],\"name\":\"pay\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"x\",\"type\":\"uint256\"}],\"name\":\"set\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"storedData\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/SimpleStorage.sol\":\"SimpleStorage\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/SimpleStorage.sol\":{\"keccak256\":\"0xfe737dceb0ef758f9b9a618dc3473e17a75661ab87c6c388c910d8fbc06363c7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1c18d1c282af22642d7226cfa5f68b15c64e03f7bcd982a1abd7a2bc622fdd64\",\"dweb:/ipfs/QmQoVJfpjD9Jrxv6ikTS2hchXcXFctmmfvSwd4MsYoBCX4\"]}},\"version\":1}",
@@ -1503,10 +1506,17 @@
       "links": {},
       "address": "0x0a8294070Da7955c26F4a74e3F5A22a6862403b5",
       "transactionHash": "0x25ea3b3a9632948360aba96a1ac4a3e8b39ae19bb9fb83152ce3088aa9dffe2f"
+    },
+    "1337": {
+      "events": {},
+      "links": {},
+      "address": "0x8079E9049705bc8C5ec84AEDAA4c2f41F23a1031",
+      "transactionHash": "0xc4d2ae1294dae7f3e20a293a1e4c7a0914848a54d5508829ad21455490067e53"
     }
   },
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-11-16T23:35:32.151Z",
+  "updatedAt": "2021-11-18T22:29:03.671Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},

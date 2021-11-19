@@ -28,7 +28,7 @@ const CallbackAbiForm = props => {
   const fieldArrayMethods = useFieldArray({
     name: 'abi'
   });
-  debugger;
+
   const {register, unregister} = formContextMethods;
   const {fields, replace, append} = fieldArrayMethods;
   const abiData = useEtherscanAbi();

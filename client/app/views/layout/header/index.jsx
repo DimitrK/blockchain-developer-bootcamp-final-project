@@ -5,12 +5,13 @@ import {Layout, Menu} from 'antd';
 import {MailOutlined, AppstoreOutlined, SettingOutlined} from '@ant-design/icons';
 import NetworkInfo from '@/views/layout/header/NetworkInfo';
 import EtherplateWhiteLogoImage from '@/images/logos/etherplate-logo--white--lg.png';
+import {useWallet} from '@/shared/providers/wallet';
 import './header.scss';
 
 const {Header} = Layout;
 
 const AppHeader = () => {
-
+  const {wallet, connect} = useWallet();
   return (
     <Header>
       <div className="logo" />
@@ -18,19 +19,14 @@ const AppHeader = () => {
         <Menu.Item key="app" icon={<AppstoreOutlined />}>
           Option
         </Menu.Item>
-        <Menu.SubMenu key="SubMenu" icon={<SettingOutlined />} title="Ether">
-          <Menu.Item key="setting:etherscan">
-            <NavLink to="/etherscan" activeClassName="is-active" styleName="">
-              <span>View on Etherscan</span>
-            </NavLink>
+        {!wallet && (
+          <Menu.Item icon={<SettingOutlined />} title="Ether" key="setting:connect" onClick={connect}>
+            <span>Connect wallet</span>
           </Menu.Item>
-          <Menu.Item key="setting:disconnect">
-            <NavLink to="/disconnect" activeClassName="is-active">
-              <span>Disconnect wallet</span>
-            </NavLink>
-          </Menu.Item>
-        </Menu.SubMenu>
-        {/* <Menu.Item><NetworkInfo /></Menu.Item> */}
+        )}
+        <Menu.Item key="setting:wallet">
+          <NetworkInfo />
+        </Menu.Item>
       </Menu>
     </Header>
   );
