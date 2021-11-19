@@ -96,6 +96,36 @@ contract Automaton is Ownable, ReentrancyGuard, Pausable {
     emit MinionRegistered(minion);
   }
 
+
+  function _forwardAutomationValue(uint _autoId, uint amount) internal {
+    require(msg.value > amount, 'not enought ether send to satisfy this action');
+    require(amount >= 0);
+    uint startBalance = address(this).balance;
+    Automation storage automation = automations[_autoId];
+    Address.sendValue(payable(automation.minion), amount);
+    automation.state = State.Forwarded;
+    emit AutomationValueForwarded(automation.minion, _autoId, amount);
+    require(address(this).balance > startBalance - msg.value);
+  }
+
+  function _executeAutomation(uint _autoId) public returns (bool executed, bytes memory result) {
+    Automation storage automation = automations[_autoId];
+    (executed, result) = IAutomatonMinion(automation.minion).executeOrder({
+      target: automation.target,
+      data: automation.data,
+      gas: automation.gasCost,
+      value: automation.amount
+    });
+
+    if (executed) {
+      automation.state = State.Completed;
+      emit AutomationCompleted(automation.creator, _autoId);
+    } else {
+      automation.state = State.Failed;
+      emit AutomationFailed(automation.creator, _autoId);
+    }
+  }
+
   function setupAutomation(address target, uint amount, uint gasPrice, bytes memory data) public payable nonReentrant returns (uint) {
     require(target != address(0), 'invalid address');
     require(msg.value > 0, 'insufficient funds');
@@ -127,40 +157,12 @@ contract Automaton is Ownable, ReentrancyGuard, Pausable {
 
     emit AutomationCreated(msg.sender, autoId);
 
-    forwardAutomationValue(autoId, msg.value.sub(fee));
+    _forwardAutomationValue(autoId, msg.value.sub(fee));
 
-    executeAutomation(autoId);
+    _executeAutomation(autoId);
 
     return autoId;
   }
 
-  function forwardAutomationValue(uint _autoId, uint amount) internal {
-    require(msg.value > amount, 'not enought ether send to satisfy this action');
-    require(amount >= 0);
-    uint startBalance = address(this).balance;
-    Automation storage automation = automations[_autoId];
-    Address.sendValue(payable(automation.minion), amount);
-    automation.state = State.Forwarded;
-    emit AutomationValueForwarded(automation.minion, _autoId, amount);
-    require(address(this).balance > startBalance - msg.value);
-  }
-
-  function executeAutomation(uint _autoId) public returns (bool executed, bytes memory result) {
-    Automation storage automation = automations[_autoId];
-    (executed, result) = IAutomatonMinion(automation.minion).executeOrder({
-      target: automation.target,
-      data: automation.data,
-      gas: automation.gasCost,
-      value: automation.amount
-    });
-
-    if (executed) {
-      automation.state = State.Completed;
-      emit AutomationCompleted(automation.creator, _autoId);
-    } else {
-      automation.state = State.Failed;
-      emit AutomationFailed(automation.creator, _autoId);
-    }
-  }
 }
 

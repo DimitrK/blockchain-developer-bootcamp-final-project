@@ -74,7 +74,7 @@ const FormReview = ({computedData = []}) => {
         value: getVariableValue(payable) || 0
       });
 
-      setGas(estimateGas);
+      setGas(estimatedGas);
     };
 
     estimateGas();
@@ -84,8 +84,6 @@ const FormReview = ({computedData = []}) => {
     calculatePayableAmount({payable, gas, gasPrice}),
     abiContract,
     getVariableValue(payable) || 0,
-    gas,
-    calculateTxGas({gas, payable}),
     gasPrice,
     encoded
   ];
