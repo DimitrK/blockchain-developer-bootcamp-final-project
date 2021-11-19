@@ -7,6 +7,7 @@ import ContractAbiForm from './contractAbiForm';
 import CallbackAbiForm from './callbackAbiForm';
 import ReviewForm from './reviewForm';
 import styles from './styles.scss';
+import logger from '@/shared/logger';
 import {useWallet} from '@/shared/providers/wallet';
 
 const {Content, Footer, Sider} = Layout;
@@ -41,14 +42,16 @@ export const _AbiForm = ({form, ...props}) => {
       const submitToContract = async () => {
         const automaton = await getAutomatonContract();
         const [value, ...params] = computedDataRef.current;
-        console.log({automaton, value, params});
+        logger.debug('Running setupAutomation:');
+        logger.table({automaton, value});
+        logger.table(params);
         return automaton.methods.setupAutomation(...params).send({from: wallet, value});
       };
 
       setStatus('fetching');
       submitToContract()
         .then(() => setStatus('completed'))
-        .catch(e => console.log(e) || setStatus('error'));
+        .catch(e => logger.error(e) || setStatus('error'));
     },
     [wallet]
   );

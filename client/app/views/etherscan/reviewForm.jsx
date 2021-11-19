@@ -5,32 +5,44 @@ import {useEtherscanAbi} from '@/shared/providers/etherscanAbi';
 import {useGetGasPrice} from '@/shared/hooks/useEtherScan';
 import ether from '@/shared/helpers/ether';
 import Ether from '@/shared/components/ether';
+import logger from '@/shared/logger';
 
 const {Paragraph, Text, Title} = Typography;
 
 const getVariableName = param => param && Object.keys(param.value)[0];
 const getVariableValue = param => param && param.value[getVariableName(param)];
 const checkIsPayable = param => getVariableName(param) === 'payable';
-const calculatePayableAmount = ({payable, gas, gasPrice} = {}) => {
+const calculatePayableAmount = ({payable, gas: estimateGas, gasPrice} = {}) => {
   const BN = web3.utils.BN;
-  const fee = new BN('160000000000000');
+  const fee = new BN('160000000000001');
 
   const bnPayableAmount = new BN(getVariableValue(payable) || 0);
-  const bnGas = new BN(gas);
+  const bnGas = new BN(calculateTxGas({gas: estimateGas, payable}));
   const bnGasCost = bnGas.mul(new BN(gasPrice));
-  return bnPayableAmount.add(fee).add(bnGasCost).toString();
+  const bnTotalPayableAmount = bnPayableAmount.add(fee).add(bnGasCost).toString();
+
+  return bnTotalPayableAmount;
 };
 
-const calculateTxGas = ({gas: estimateGas, payable}) => {
+const calculateTxGas = ({gas: estimateGas = 0, payable}) => {
+  if (Number(estimateGas) <= 0) {
+    return '0';
+  }
+
   const BN = web3.utils.BN;
   const isPayable = !!getVariableValue(payable);
-  const stipendGas = new BN('2300');
-  const transferGas = new BN('21000');
+  const bnStipendGas = new BN(2300);
+  const bnTransferGas = new BN(21000);
+  const bnEstimateGas = new BN(estimateGas);
 
-  return new BN(estimateGas)
-    .add(stipendGas)
-    .add(isPayable ? transferGas : new BN(0))
+  const totalGas = bnEstimateGas
+    .add(bnStipendGas)
+    .add(isPayable ? bnTransferGas : new BN(0))
     .toString();
+
+  logger.table({estimateGas, isPayable, totalGas});
+
+  return totalGas;
 };
 
 const getFunctionSignature = ({abi, method, params = []}) => {
@@ -80,13 +92,18 @@ const FormReview = ({computedData = []}) => {
     estimateGas();
   }, [payable, gasPrice]);
 
-  computedData.current = [
-    calculatePayableAmount({payable, gas, gasPrice}),
-    abiContract,
-    getVariableValue(payable) || 0,
-    gasPrice,
-    encoded
-  ];
+  if (gasPrice) {
+    console.table({gasPrice});
+    computedData.current = [
+      calculatePayableAmount({payable, gas, gasPrice}),
+      abiContract,
+      getVariableValue(payable) || 0,
+      gasPrice,
+      encoded
+    ];
+  }
+
+  gasError && logger.error(gasError);
 
   return (
     <div>
@@ -117,7 +134,9 @@ const FormReview = ({computedData = []}) => {
                 <div>
                   <Text keyboard>Total gas cost (in ether)</Text> :{' '}
                   <Text>
-                    <Ether wei={calculateTxGas({gas, payable}) * ether(proposedGasPriceInGwei, ether.units.GWEI).to.wei()} />
+                    <Ether
+                      wei={calculateTxGas({gas, payable}) * ether(proposedGasPriceInGwei, ether.units.GWEI).to.wei()}
+                    />
                   </Text>
                   <Text>
                     <Ether wei={calculateTxGas({gas, payable}) * gasPrice} />
