@@ -64,7 +64,7 @@ contract Automaton is Ownable, ReentrancyGuard, Pausable {
     super._unpause();
   }
 
-  function changeFeeCost(uint newFee) public onlyOwner {
+  function changeFeeCost(uint newFee) public onlyOwner whenPaused {
     require(newFee < 0, 'tip was less or equal to zero');
     fee = newFee;
   }
@@ -96,7 +96,7 @@ contract Automaton is Ownable, ReentrancyGuard, Pausable {
   }
 
 
-  function _forwardAutomationValue(uint _autoId, uint amount) internal {
+  function _forwardAutomationValue(uint _autoId, uint amount) internal whenNotPaused {
     require(msg.value > amount, 'not enought ether send to satisfy this action');
     require(amount >= 0);
     uint startBalance = address(this).balance;
@@ -107,7 +107,7 @@ contract Automaton is Ownable, ReentrancyGuard, Pausable {
     require(address(this).balance.add(fee)>= startBalance.sub(msg.value));
   }
 
-  function setupAutomation(address target, uint amount, uint gasPrice, bytes memory data) public payable nonReentrant returns (uint) {
+  function setupAutomation(address target, uint amount, uint gasPrice, bytes memory data) public payable whenNotPaused returns (uint) {
     require(target != address(0), 'invalid address');
     require(msg.value > 0, 'insufficient funds');
     require(gasPrice > 1, 'invalid gas price');
@@ -146,7 +146,7 @@ contract Automaton is Ownable, ReentrancyGuard, Pausable {
   }
 
 
-  function executeAutomation(uint _autoId) public returns (bool executed, bytes memory result) {
+  function executeAutomation(uint _autoId) public whenNotPaused nonReentrant returns  (bool executed, bytes memory result) {
     Automation storage automation = automations[_autoId];
     (executed, result) = IAutomatonMinion(automation.minion).executeOrder({
       target: automation.target,
