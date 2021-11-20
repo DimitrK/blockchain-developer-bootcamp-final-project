@@ -40,4 +40,3 @@ export const catchStackUnderflow = async function (promise) {
 export const catchStaticStateChange = async function (promise) {
   await tryCatch(promise, 'static state change');
 };
-

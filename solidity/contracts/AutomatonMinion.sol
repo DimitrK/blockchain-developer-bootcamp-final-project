@@ -12,8 +12,8 @@ contract AutomatonMinion is IAutomatonMinion, ReentrancyGuard {
   address public creator = msg.sender;
   address[2] public owners;
 
-  event ReceivedFund(address indexed payer, uint amount);
-  event OrderExecuted(address indexed target, bool result, uint gasLeft);
+  event ReceivedFund(address indexed minion, address indexed payer, uint amount);
+  event OrderExecuted(address indexed minion, address indexed invoker, address target, bool result, uint gasLeft);
 
   modifier onlyOwners() {
     require(!_addressesAreEmpty(owners[0], owners[1]), 'Minion: contract can not be used before registering');
@@ -43,7 +43,7 @@ contract AutomatonMinion is IAutomatonMinion, ReentrancyGuard {
   }
 
   receive() external payable {
-    emit ReceivedFund(msg.sender, msg.value);
+    emit ReceivedFund(address(this), msg.sender, msg.value);
   }
 
   function withdraw(uint amount) external onlyOwners nonReentrant {
@@ -68,6 +68,6 @@ contract AutomatonMinion is IAutomatonMinion, ReentrancyGuard {
     result = Address.verifyCallResult(_success, returndata, 'Minion: executing order failed');
     success = result.length == 0;
 
-    emit OrderExecuted(target, success, remainingGas);
+    emit OrderExecuted(address(this), msg.sender, target, success, remainingGas);
   }
 }

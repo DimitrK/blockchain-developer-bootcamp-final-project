@@ -1,9 +1,9 @@
-import {catchRevert} from './support/assert-revert';
+import {catchRevert} from './support/assertRevert';
+import {assertEvent} from './support/assertEvent';
 import {constants} from '@openzeppelin/test-helpers';
 const {ZERO_BYTES32, ZERO_ADDRESS} = constants;
 const AutomatonMinion = artifacts.require('../contracts/AutomatonMinion.sol');
 const SimpleStorage = artifacts.require('../contracts/SimpleStorage.sol');
-const LinkToken = artifacts.require('../../chainlink/contracts/LinkToken.sol');
 const BN = web3.utils.BN;
 
 const getAbiDefinition = (contract, matcher = {}) => {
@@ -102,7 +102,6 @@ contract('AutomatonMinion', accounts => {
       const simpleStorage = await SimpleStorage.new();
       const bytesCommand = web3.eth.abi.encodeFunctionCall(getAbiDefinition(simpleStorage, {name: 'pay'}), [9]);
 
-
       await minion.register(creatorAddress, firstOwnerAddress);
       await minion.sendTransaction({value: moreEther});
       const ownerBalance = await web3.eth.getBalance(creatorAddress);
@@ -120,7 +119,6 @@ contract('AutomatonMinion', accounts => {
       const simpleStorage = await SimpleStorage.new();
       const bytesCommand = web3.eth.abi.encodeFunctionCall(getAbiDefinition(simpleStorage, {name: 'pay'}), [9]);
 
-
       await minion.register(creatorAddress, firstOwnerAddress);
       await minion.sendTransaction({value: lessEther});
       const ownerBalance = await web3.eth.getBalance(creatorAddress);
@@ -131,10 +129,30 @@ contract('AutomatonMinion', accounts => {
       catchRevert(catchNotEnoughFunds, 'Minion: insufficient balance');
       assert.equal(await simpleStorage.storedData.call(), 0, 'the value should not be set');
       assert.equal(simpleBalance, 0, 'there should be no ether');
-    })
+    });
+  });
 
-    it('shows link', () => {
-      console.log({LinkToken})
-    })
+  describe('Events', () => {
+    it('should emit OrderExecuted event when executing an order', async () => {
+      const simpleStorage = await SimpleStorage.new();
+      const bytesCommand = web3.eth.abi.encodeFunctionCall(getAbiDefinition(simpleStorage, {name: 'set'}), [9]);
+
+      await minion.register(creatorAddress, firstOwnerAddress);
+      const tx = await minion.executeOrder(simpleStorage.address, bytesCommand, 25000, 0);
+
+      assertEvent(tx, 'OrderExecuted', 'executing an order should emit an OrderExecuted event')
+        .withKeys(
+          ['minion', 'invoker', 'target', 'result', 'gasLeft'],
+          'event should match the key names'
+        );
+    });
+
+    it('should emit ReceivedFund event when receiving ether', async () => {
+      const tx = await minion.sendTransaction({value: lessEther, from: creatorAddress});
+
+      assertEvent(tx, 'ReceivedFund', 'receiving ether should emit a ReceivedFund event')
+        .withValues([minion.address, creatorAddress, lessEther], 'should fire with the specific values')
+        .withKeys(['minion', 'payer', 'amount'], 'event should match the key names');
+    });
   });
 });
