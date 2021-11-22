@@ -9,7 +9,8 @@
     "remix:chainlink": "npx remixd -s ./node_modules/chainlink/contracts --remix-ide https://remix.ethereum.org",
     "remix:truffle": "npx remixd -s ./truffle/contracts --remix-ide https://remix.ethereum.org",
 
-    "start": "truffle migrate && npm run chainlink:start",
+    "start": "yarn build && npm run chainlink:start",
+    "build": "truffle compile && truffle migrate",
     "stop": "docker rm -f chainlink-dev",
     "test": "truffle test",
 
