@@ -18,6 +18,12 @@ module.exports = {
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY
   },
+  solc: {
+      optimizer: {
+          enabled: true,
+          runs: 200
+      }
+  },
   networks: {
     ropsten: {
       provider: new HDWalletProvider(
