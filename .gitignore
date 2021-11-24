@@ -108,3 +108,6 @@ dist
 .env
 .env.me
 !.env.project
+
+.deps
+.setup-data
