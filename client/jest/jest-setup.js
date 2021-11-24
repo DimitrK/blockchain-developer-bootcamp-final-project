@@ -11,6 +11,6 @@ global.render = render;
 global.mount = mount;
 global.Web3 = Web3
 
-const provider = new Web3.providers.HttpProvider("http://localhost:8545");
+const provider = new Web3.providers.HttpProvider("http://localhost:8546");
 global.window.web3 = new Web3(provider);
 global.window.web3.eth.defaultAccount = global.window.web3.eth.accounts[0]

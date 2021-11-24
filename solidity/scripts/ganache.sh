@@ -8,4 +8,5 @@ mkdir -p .ganache
   -a 10 \
   -g 134000000000 \
   -u 0 \
+  -p 8546 \
   -m "$HDWALLET_MNEMONIC"
