@@ -6,8 +6,8 @@
     "chainlink:logs": "docker logs chainlink-dev",
     "chainlink:start": "./chainlink/start-cl.sh",
 
-    "remix:chainlink": "npx remixd -s ./node_modules/chainlink/contracts --remix-ide https://remix.ethereum.org",
-    "remix:truffle": "npx remixd -s ./truffle/contracts --remix-ide https://remix.ethereum.org",
+    "remix:chainlink": "npx @remix-project/remixd -s ./node_modules/chainlink/contracts --remix-ide https://remix.ethereum.org",
+    "remix:truffle": "npx @remix-project/remixd -s ./contracts --remix-ide https://remix.ethereum.org",
 
     "start": "yarn build && npm run chainlink:start",
     "build": "truffle compile && truffle migrate",
