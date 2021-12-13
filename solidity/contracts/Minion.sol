@@ -4,12 +4,12 @@ pragma solidity 0.8.9;
 
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
-import "./IAutomatonMinion.sol";
+import "./interfaces/IMinion.sol";
 
-contract AutomatonMinion is IAutomatonMinion, ReentrancyGuard {
+contract Minion is IMinion, ReentrancyGuard {
   using Address for address payable;
 
-  address public creator = msg.sender;
+  address immutable public creator;
   address[2] public owners;
 
   event ReceivedFund(address indexed minion, address indexed payer, uint amount);
@@ -19,6 +19,11 @@ contract AutomatonMinion is IAutomatonMinion, ReentrancyGuard {
     require(!_addressesAreEmpty(owners[0], owners[1]), 'Minion: contract can not be used before registering');
     require(owners[0] == msg.sender || owners[1] == msg.sender, 'Minion: only owners allowed to perform this action');
     _;
+  }
+
+  constructor(address _creator) {
+    require(_creator != address(0));
+    creator = _creator;
   }
 
   /**

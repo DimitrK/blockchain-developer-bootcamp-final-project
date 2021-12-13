@@ -17,7 +17,7 @@ contract GanacheChainlinkClient is ChainlinkClient, Ownable {
     setChainlinkToken(_link);
   }
 
-  function requestEthereumPrice(address _oracle, string _jobId)
+  function requestEthereumPrice(address _oracle, string memory _jobId)
     public
     onlyOwner
   {

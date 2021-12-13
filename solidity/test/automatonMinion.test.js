@@ -2,7 +2,7 @@ import {catchRevert} from './support/assertRevert';
 import {assertEvent} from './support/assertEvent';
 import {constants} from '@openzeppelin/test-helpers';
 const {ZERO_BYTES32, ZERO_ADDRESS} = constants;
-const AutomatonMinion = artifacts.require('../contracts/AutomatonMinion.sol');
+const AutomatonMinion = artifacts.require('../contracts/Minion.sol');
 const SimpleStorage = artifacts.require('../contracts/SimpleStorage.sol');
 const BN = web3.utils.BN;
 
@@ -26,7 +26,7 @@ contract('AutomatonMinion', accounts => {
 
   beforeEach(async () => {
     /* before each context */
-    minion = await AutomatonMinion.new();
+    minion = await AutomatonMinion.new(creatorAddress);
   });
 
   it('is has the creator assigned', async () => {
