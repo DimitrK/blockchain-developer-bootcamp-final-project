@@ -10,6 +10,7 @@
     "start": "node ./scripts/runner ./scripts/ganache.sh",
     "dev": "truffle develop",
     "test": "truffle test",
+    "console": "truffle console",
     "dotenv:pull": "dotenv-cli pull",
     "dotenv:push": "dotenv-cli push",
     "dotevn": "dotenv-cli init athens-solidity"
@@ -28,6 +29,7 @@
     "@openzeppelin/contracts": "^4.3.2",
     "@openzeppelin/test-helpers": "^0.5.15",
     "dotenv": "10.0.0",
+    "eth-gas-reporter": "^0.2.23",
     "ganache-cli": "6.12.2",
     "truffle": "5.4.12",
     "truffle-deployer": "3.0.32"
