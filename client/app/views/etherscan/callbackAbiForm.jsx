@@ -21,7 +21,7 @@ const formItemLayout = {
   }
 };
 
-const getParameterFieldName = (field, index) => `abiParam.${index}.value.${field.name}`;
+const getParameterFieldName = (field, index) => `abiParams.${index}.value.${field.name}`;
 
 const CallbackAbiForm = props => {
   const formContextMethods = useFormContext();

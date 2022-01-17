@@ -6,17 +6,18 @@ import {useGetGasPrice} from '@/shared/hooks/useEtherScan';
 import ether from '@/shared/helpers/ether';
 import Ether from '@/shared/components/ether';
 import logger from '@/shared/logger';
+import getOracleAddress from '@/shared/helpers/network/getOracleAddress';
 
 const {Paragraph, Text, Title} = Typography;
 
 const getVariableName = param => param && Object.keys(param.value)[0];
 const getVariableValue = param => param && param.value[getVariableName(param)];
 const checkIsPayable = param => getVariableName(param) === 'payable';
-const calculatePayableAmount = ({payable, gas: estimateGas, gasPrice} = {}) => {
+const calculatePayableAmount = ({payable = '0', gas: estimateGas, gasPrice} = {}) => {
   const BN = web3.utils.BN;
-  const fee = new BN('160000000000001');
+  const fee = new BN('150000000000000000');
 
-  const bnPayableAmount = new BN(getVariableValue(payable) || 0);
+  const bnPayableAmount = new BN(payable);
   const bnGas = new BN(calculateTxGas({gas: estimateGas, payable}));
   const bnGasCost = bnGas.mul(new BN(gasPrice));
   const bnTotalPayableAmount = bnPayableAmount.add(fee).add(bnGasCost).toString();
@@ -30,14 +31,18 @@ const calculateTxGas = ({gas: estimateGas = 0, payable}) => {
   }
 
   const BN = web3.utils.BN;
-  const isPayable = !!getVariableValue(payable);
+  const isPayable = !!payable;
   const bnStipendGas = new BN(2300);
   const bnTransferGas = new BN(21000);
+  const bnAutomationExecutionGas = new BN(21000);
+  const bnPostTransferGas = new BN(20000)
   const bnEstimateGas = new BN(estimateGas);
 
   const totalGas = bnEstimateGas
     .add(bnStipendGas)
+    .add(bnAutomationExecutionGas)
     .add(isPayable ? bnTransferGas : new BN(0))
+    .add(bnPostTransferGas)
     .toString();
 
   logger.table({estimateGas, isPayable, totalGas});
@@ -56,6 +61,7 @@ const getFunctionSignature = ({abi, method, params = []}) => {
   const data = functionSignature + encodedParams.join('');
   return data;
 };
+
 const getByName = (abi, name) => {
   const func = abi.find(func => func.name === name);
   return func;
@@ -66,13 +72,13 @@ const FormReview = ({computedData = []}) => {
   const abiData = useEtherscanAbi();
   const {data: gasPriceResult, error: gasError} = useGetGasPrice();
   const {getValues} = useFormContext();
-  const {abiContract, abiMethod, abiParam = []} = getValues();
-  const payable = abiParam.find(checkIsPayable);
+  const {abiContract, abiMethod, abiParams = []} = getValues();
+  const payable = getVariableValue(abiParams.find(checkIsPayable)) || 0;
   const {ProposeGasPrice: proposedGasPriceInGwei} = gasPriceResult || {};
   const gasPrice = proposedGasPriceInGwei ? web3.utils.toWei(`${proposedGasPriceInGwei}`, 'gwei') : '0';
 
   const contract = new web3.eth.Contract(abiData, abiContract);
-  const params = abiParam.filter(p => !checkIsPayable(p)).map(getVariableValue);
+  const params = abiParams.filter(p => !checkIsPayable(p)).map(getVariableValue);
   const encoded = contract.methods[abiMethod](...params).encodeABI();
 
   useEffect(() => {
@@ -83,7 +89,7 @@ const FormReview = ({computedData = []}) => {
       const estimatedGas = await web3.eth.estimateGas({
         to: abiContract,
         data: encoded,
-        value: getVariableValue(payable) || 0
+        value: payable
       });
 
       setGas(estimatedGas);
@@ -93,14 +99,23 @@ const FormReview = ({computedData = []}) => {
   }, [payable, gasPrice]);
 
   if (gasPrice) {
-    console.table({gasPrice});
-    computedData.current = [
-      calculatePayableAmount({payable, gas, gasPrice}),
-      abiContract,
-      getVariableValue(payable) || 0,
-      gasPrice,
-      encoded
-    ];
+    getOracleAddress().then(oracle => {
+      console.table({gasPrice});
+      const exampleOracleQuery = [
+        web3.eth.abi.encodeParameter('uint256', 3000),
+        3, //LT
+        oracle
+      ]
+      computedData.current = [
+        calculatePayableAmount({payable, gas, gasPrice}),
+        abiContract,
+        payable,
+        gasPrice,
+        encoded,
+        ...exampleOracleQuery
+      ];
+
+    })
   }
 
   gasError && logger.error(gasError);
@@ -119,7 +134,7 @@ const FormReview = ({computedData = []}) => {
       <Space />
       <Card>
         <List>
-          {abiParam.map((p, i) => {
+          {abiParams.map((p, i) => {
             return (
               <List.Item key={i}>
                 <Text>
@@ -134,24 +149,17 @@ const FormReview = ({computedData = []}) => {
                 <div>
                   <Text keyboard>Total gas cost (in ether)</Text> :{' '}
                   <Text>
-                    <Ether
-                      wei={calculateTxGas({gas, payable}) * ether(proposedGasPriceInGwei, ether.units.GWEI).to.wei()}
-                    />
-                  </Text>
-                  <Text>
                     <Ether wei={calculateTxGas({gas, payable}) * gasPrice} />
                   </Text>
                 </div>
                 <Text type="secondary">
                   {' '}
-                  · Gas: {gas} | Gas price: {gasPrice}
+                  · Gas: {calculateTxGas({gas, payable})} | Gas price: {gasPrice}
                 </Text>
               </Space>
             </List.Item>
           )}
         </List>
-        <Text secondary>Debug:</Text>
-        <Text secondary>{encoded}</Text>
       </Card>
     </div>
   );

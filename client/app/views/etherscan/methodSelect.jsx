@@ -1,5 +1,5 @@
 import React, {forwardRef} from 'react';
-import {Select, Space} from 'antd';
+import {Select} from 'antd';
 const {Option} = Select;
 
 const AbiMethodSelect = forwardRef(({methods = [], ...props}, ref) => {

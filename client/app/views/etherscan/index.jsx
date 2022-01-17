@@ -75,8 +75,8 @@ export const _AbiForm = ({form, ...props}) => {
 
   return (
     <form {...props} noValidate onSubmit={form.handleSubmit(onSubmit)}>
-      <p>Standard: 0x879a5031823942b52c0f0a770d97235e6227da34</p>
-      <p>Payable: 0x5969c6afdf69ebf671f46ced3461d55969deef3c</p>
+      {/* <p>Standard: 0x879a5031823942b52c0f0a770d97235e6227da34</p>
+      <p>Payable: 0x5969c6afdf69ebf671f46ced3461d55969deef3c</p> */}
       <Layout className={styles.abiFormWizard}>
         <Layout>
           <Content>{isLastStep ? <StepView computedData={computedDataRef} /> : <StepView />}</Content>
