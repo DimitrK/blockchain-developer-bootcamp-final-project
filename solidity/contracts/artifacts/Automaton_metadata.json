@@ -38,6 +38,83 @@
 						"internalType": "uint256",
 						"name": "automationId",
 						"type": "uint256"
+					},
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "creator",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "minion",
+								"type": "address"
+							},
+							{
+								"components": [
+									{
+										"internalType": "bytes",
+										"name": "data",
+										"type": "bytes"
+									},
+									{
+										"internalType": "uint256",
+										"name": "gasLimit",
+										"type": "uint256"
+									},
+									{
+										"internalType": "uint256",
+										"name": "gasPrice",
+										"type": "uint256"
+									},
+									{
+										"internalType": "uint256",
+										"name": "amount",
+										"type": "uint256"
+									},
+									{
+										"internalType": "address",
+										"name": "target",
+										"type": "address"
+									}
+								],
+								"internalType": "struct Automaton.Action",
+								"name": "action",
+								"type": "tuple"
+							},
+							{
+								"components": [
+									{
+										"internalType": "address",
+										"name": "oracle",
+										"type": "address"
+									},
+									{
+										"internalType": "enum Automaton.Comparator",
+										"name": "comparator",
+										"type": "uint8"
+									},
+									{
+										"internalType": "bytes",
+										"name": "subject",
+										"type": "bytes"
+									}
+								],
+								"internalType": "struct Automaton.Condition",
+								"name": "condition",
+								"type": "tuple"
+							},
+							{
+								"internalType": "enum Automaton.State",
+								"name": "state",
+								"type": "uint8"
+							}
+						],
+						"indexed": false,
+						"internalType": "struct Automaton.Automation",
+						"name": "automation",
+						"type": "tuple"
 					}
 				],
 				"name": "AutomationCreated",
@@ -57,6 +134,12 @@
 						"internalType": "uint256",
 						"name": "automationId",
 						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "bytes",
+						"name": "reason",
+						"type": "bytes"
 					}
 				],
 				"name": "AutomationFailed",
@@ -91,13 +174,51 @@
 				"anonymous": false,
 				"inputs": [
 					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "newValue",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "prevValue",
+						"type": "uint256"
+					}
+				],
+				"name": "FeeCostChanged",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "FundsReceived",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
 						"indexed": true,
 						"internalType": "address",
 						"name": "creator",
 						"type": "address"
 					},
 					{
-						"indexed": true,
+						"indexed": false,
 						"internalType": "address",
 						"name": "minion",
 						"type": "address"
@@ -136,25 +257,6 @@
 					}
 				],
 				"name": "Paused",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "sender",
-						"type": "address"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					}
-				],
-				"name": "Received",
 				"type": "event"
 			},
 			{
@@ -204,33 +306,62 @@
 					},
 					{
 						"internalType": "address",
-						"name": "target",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
 						"name": "minion",
 						"type": "address"
 					},
 					{
-						"internalType": "bytes",
-						"name": "data",
-						"type": "bytes"
+						"components": [
+							{
+								"internalType": "bytes",
+								"name": "data",
+								"type": "bytes"
+							},
+							{
+								"internalType": "uint256",
+								"name": "gasLimit",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "gasPrice",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "target",
+								"type": "address"
+							}
+						],
+						"internalType": "struct Automaton.Action",
+						"name": "action",
+						"type": "tuple"
 					},
 					{
-						"internalType": "uint256",
-						"name": "gasLimit",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "gasCost",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
+						"components": [
+							{
+								"internalType": "address",
+								"name": "oracle",
+								"type": "address"
+							},
+							{
+								"internalType": "enum Automaton.Comparator",
+								"name": "comparator",
+								"type": "uint8"
+							},
+							{
+								"internalType": "bytes",
+								"name": "subject",
+								"type": "bytes"
+							}
+						],
+						"internalType": "struct Automaton.Condition",
+						"name": "condition",
+						"type": "tuple"
 					},
 					{
 						"internalType": "enum Automaton.State",
@@ -252,6 +383,35 @@
 				"name": "changeFeeCost",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "oracle",
+						"type": "address"
+					},
+					{
+						"internalType": "enum Automaton.Comparator",
+						"name": "comparator",
+						"type": "uint8"
+					},
+					{
+						"internalType": "bytes",
+						"name": "subject",
+						"type": "bytes"
+					}
+				],
+				"name": "checkCondition",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -312,7 +472,51 @@
 			},
 			{
 				"inputs": [],
-				"name": "feeBalance",
+				"name": "gasOverhead",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "minionFactoryAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "initialFee",
+						"type": "uint256"
+					}
+				],
+				"name": "initialize",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "initialFee",
+						"type": "uint256"
+					}
+				],
+				"name": "initialize",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "lastAutoIdChecked",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -384,6 +588,21 @@
 						"internalType": "bytes",
 						"name": "data",
 						"type": "bytes"
+					},
+					{
+						"internalType": "bytes",
+						"name": "subject",
+						"type": "bytes"
+					},
+					{
+						"internalType": "enum Automaton.Comparator",
+						"name": "comparator",
+						"type": "uint8"
+					},
+					{
+						"internalType": "address",
+						"name": "oracle",
+						"type": "address"
 					}
 				],
 				"name": "setupAutomation",
@@ -454,14 +673,35 @@
 			"version": 1
 		},
 		"userdoc": {
+			"events": {
+				"FeeCostChanged(uint256,uint256)": {
+					"notice": "=== === === === === Events === === === === === ==="
+				},
+				"MinionRegistered(address,address)": {
+					"notice": "=== === === === === Events === === === === === ==="
+				}
+			},
 			"kind": "user",
-			"methods": {},
+			"methods": {
+				"fee()": {
+					"notice": "Service fee"
+				},
+				"gasOverhead()": {
+					"notice": "Stipend gas of 2300 + 2x Transfer gas of 21000. This gas gets allocated in order to call the minion once the condition has been met This call alone costs 21000 intrinsic gas + ~1500 gas for emmiting an event once the automation fullfiled. The rest goes to refund the chainlink keeper for calling (21000) Automaton plus changes (20000~) in the state of automation once executed."
+				},
+				"initialize(address,uint256)": {
+					"notice": "=== === === === === Functions === === === === === === Automation functions responsible for running the automaton logic"
+				},
+				"initialize(uint256)": {
+					"notice": "=== === === === === Function === === === === === ==="
+				}
+			},
 			"version": 1
 		}
 	},
 	"settings": {
 		"compilationTarget": {
-			"Automaton.sol": "Automaton"
+			"solidity/contracts/Automaton.sol": "Automaton"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -469,7 +709,7 @@
 			"bytecodeHash": "ipfs"
 		},
 		"optimizer": {
-			"enabled": false,
+			"enabled": true,
 			"runs": 200
 		},
 		"remappings": []
@@ -523,28 +763,36 @@
 				"dweb:/ipfs/QmPZoN9T3cb6o8bGhjBPZcz7im8T8DWhpr3tjLwhJJHx9N"
 			]
 		},
-		"Automaton.sol": {
-			"keccak256": "0x38affbc704a380e98f386446033ac1ce3a2e3afed4432bc67b63fe33f4578a12",
+		"solidity/contracts/Automaton.sol": {
+			"keccak256": "0x53d817a58add3ce4076c23da87038a97b47762a24117fe5452ac9bd086c52963",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://84ff6ae9dcf6a9c327cb29be724637bb9903928767de6d9279153e6d3dee961f",
-				"dweb:/ipfs/QmRcZy1G25JLihW5f5ezEvF9JomqiBN6z1gybqtMz74fXh"
+				"bzz-raw://df8a3bb71277b29965c7fddf154f1b8f465c9f133f1dcba82a6e957e614c2c99",
+				"dweb:/ipfs/QmSsf5sCVa8hLGDhFADjSBvVuRD9ZM1ccaSgWR7fYpRzC7"
 			]
 		},
-		"AutomatonMinion.sol": {
-			"keccak256": "0xe685f4d9d9a3f5f6931d0a6925c8a1e172ef1bbe7bef4dedaa6486545612bad1",
+		"solidity/contracts/BaseFeeContract.sol": {
+			"keccak256": "0x4eba202c6c16506144cbcffd1be837bc632a6449319ea912a88dd88c52fd051d",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://a5d95016bf63d993cdf33b5fe26230082fa5b79caf4776e47aa02e448e116b4f",
-				"dweb:/ipfs/Qmap4GeawuB4ng7s7MTLwX7j5hN59RT4YNbTE9djRh3sgL"
+				"bzz-raw://1b9b1ba94850f7b41232477d6104c3e3e719110613a6cd685aa99a1c7cc6196a",
+				"dweb:/ipfs/QmNcQMyMdm4Z8j7vtQyTPpKcixAcars2qR2jvYf2RJV3t1"
 			]
 		},
-		"IAutomatonMinion.sol": {
-			"keccak256": "0x8b32cf7cae32860f8d548f0ba7f4c138e7643d9aef47789f87f12723a827b4a6",
+		"solidity/contracts/interfaces/IMinion.sol": {
+			"keccak256": "0xbc412c70ecef6db34e969ef3038042a6d1bfe8a94387a8dbb02bc57ab532c1ea",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://b137c691866e5135f76317786e64e5216f034928823fe4d8c272c167e3b804af",
-				"dweb:/ipfs/QmSg8p6n9NkKpTZv3nrLn391AAQpdTUhJEbDEnLxJdKfF8"
+				"bzz-raw://6d05611d83f2417f0f235d24cbe4382f2fa47026ce6fb9026f5294b7b3359a05",
+				"dweb:/ipfs/QmdDnzq99pUVmCSH29iZE9rksdsgYuJzRmiu18B8ZMcNgp"
+			]
+		},
+		"solidity/contracts/interfaces/IMinionFactory.sol": {
+			"keccak256": "0xa84d5508a9f93b985d5fb788b0b334099ce45f317968bd5105871287e3854269",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://d68d33825477eadb3a495514fc8e9b504f295fdfad8f0745021bea82da6eda7a",
+				"dweb:/ipfs/QmXM8os16baxEqW4LzqwzjBt3mk2w61J6eWmuAbjJon3E4"
 			]
 		}
 	},

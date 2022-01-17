@@ -1,0 +1,118 @@
+{
+	"compiler": {
+		"version": "0.8.9+commit.e5eed63a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					}
+				],
+				"name": "spawn",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "minion",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"spawn(address)": {
+					"params": {
+						"owner": "- The address of the real owner of the contract"
+					},
+					"returns": {
+						"minion": "- The address of the newly deployed minion contract"
+					}
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"spawn(address)": {
+					"notice": "Deploys a new minion contract for the given owner. Passes msg.sender as the creator and the co-owner of the minion"
+				}
+			},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"solidity/contracts/MinionFactory.sol": "MinionFactory"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/security/ReentrancyGuard.sol": {
+			"keccak256": "0x842ccf9a6cd33e17b7acef8372ca42090755217b358fe0c44c98e951ea549d3a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6cc5f36034a77d105263ae6d8cc18b16260b4a0f6cdb1a26f21ba3670fdd06dd",
+				"dweb:/ipfs/QmdJrJ2LoG546BkfyZPta96BNmaVBfqZoh8kq7PqHuQyPk"
+			]
+		},
+		"@openzeppelin/contracts/utils/Address.sol": {
+			"keccak256": "0x3336baae5cf23e94274d75336e2d412193be508504aee185e61dc7d58cd05c8a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://39a05eec7083dfa0cc7e0cbfe6cd1bd085a340af1ede93fdff3ad047c5fb3d8e",
+				"dweb:/ipfs/QmVApz5fCUq2QC8gKTsNNdCmcedJ3ETHp68zR5N3WUKS4r"
+			]
+		},
+		"solidity/contracts/Minion.sol": {
+			"keccak256": "0xd88772758625c7e649640a12d36d42150a193f96c3a537a03910cf5e4e3db4fb",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://837556f3fb82938d46fdf6c6938a253ac60245f02cb01803769174d10d389940",
+				"dweb:/ipfs/QmbZcs81JZV5QXPMX9pmUwg9Kvvg2Hrju5ABZBDrabnSgy"
+			]
+		},
+		"solidity/contracts/MinionFactory.sol": {
+			"keccak256": "0x1d846723829ed20bd532acdff7db21eb71754596cd7e5896cf0f5cd300401929",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://380a89940e6f2651ed8fec6c27bbec00b74f9ca3caa30b9943ca2cbacf8c46dd",
+				"dweb:/ipfs/QmUe1UHUhUy1wrj724cR3Zkv4TdnzfrYc1Uu62H6mqcT73"
+			]
+		},
+		"solidity/contracts/interfaces/IMinion.sol": {
+			"keccak256": "0xbc412c70ecef6db34e969ef3038042a6d1bfe8a94387a8dbb02bc57ab532c1ea",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6d05611d83f2417f0f235d24cbe4382f2fa47026ce6fb9026f5294b7b3359a05",
+				"dweb:/ipfs/QmdDnzq99pUVmCSH29iZE9rksdsgYuJzRmiu18B8ZMcNgp"
+			]
+		},
+		"solidity/contracts/interfaces/IMinionFactory.sol": {
+			"keccak256": "0xa84d5508a9f93b985d5fb788b0b334099ce45f317968bd5105871287e3854269",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://d68d33825477eadb3a495514fc8e9b504f295fdfad8f0745021bea82da6eda7a",
+				"dweb:/ipfs/QmXM8os16baxEqW4LzqwzjBt3mk2w61J6eWmuAbjJon3E4"
+			]
+		}
+	},
+	"version": 1
+}

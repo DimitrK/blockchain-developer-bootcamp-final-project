@@ -1,0 +1,334 @@
+{
+  "contractName": "IMinionFactory",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "name": "spawn",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.9+commit.e5eed63a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"spawn\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"spawn(address)\":{\"params\":{\"owner\":\"- The address of the real owner of the contract\"},\"returns\":{\"_0\":\"minion - The address of the newly deployed minion contract\"}}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"spawn(address)\":{\"notice\":\"Deploys a new minion contract for the given owner. Passes msg.sender as the creator and the co-owner of the minion\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/interfaces/IMinionFactory.sol\":\"IMinionFactory\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/interfaces/IMinionFactory.sol\":{\"keccak256\":\"0xa84d5508a9f93b985d5fb788b0b334099ce45f317968bd5105871287e3854269\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d68d33825477eadb3a495514fc8e9b504f295fdfad8f0745021bea82da6eda7a\",\"dweb:/ipfs/QmXM8os16baxEqW4LzqwzjBt3mk2w61J6eWmuAbjJon3E4\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "//SPDX-License-Identifier: MIT\n\npragma solidity 0.8.9;\n\ninterface IMinionFactory {\n  /**\n   * Deploys a new minion contract for the given owner.\n   * Passes msg.sender as the creator and the co-owner of the minion\n   * @param owner - The address of the real owner of the contract\n   * @return minion - The address of the newly deployed minion contract\n   */\n  function spawn(address owner) external returns(address);\n}\n",
+  "sourcePath": "/Users/dimitriskyriazopoulos/Development/solid/blockchain-developer-bootcamp-final-project/solidity/contracts/interfaces/IMinionFactory.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/interfaces/IMinionFactory.sol",
+    "exportedSymbols": {
+      "IMinionFactory": [
+        3210
+      ]
+    },
+    "id": 3211,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 3201,
+        "literals": [
+          "solidity",
+          "0.8",
+          ".9"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "32:22:21"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "IMinionFactory",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "id": 3210,
+        "linearizedBaseContracts": [
+          3210
+        ],
+        "name": "IMinionFactory",
+        "nameLocation": "66:14:21",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "documentation": {
+              "id": 3202,
+              "nodeType": "StructuredDocumentation",
+              "src": "85:272:21",
+              "text": " Deploys a new minion contract for the given owner.\n Passes msg.sender as the creator and the co-owner of the minion\n @param owner - The address of the real owner of the contract\n @return minion - The address of the newly deployed minion contract"
+            },
+            "functionSelector": "c63300a5",
+            "id": 3209,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "spawn",
+            "nameLocation": "369:5:21",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3205,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3204,
+                  "mutability": "mutable",
+                  "name": "owner",
+                  "nameLocation": "383:5:21",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3209,
+                  "src": "375:13:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3203,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "375:7:21",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "374:15:21"
+            },
+            "returnParameters": {
+              "id": 3208,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3207,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3209,
+                  "src": "407:7:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3206,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "407:7:21",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "406:9:21"
+            },
+            "scope": 3210,
+            "src": "360:56:21",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 3211,
+        "src": "56:362:21",
+        "usedErrors": []
+      }
+    ],
+    "src": "32:387:21"
+  },
+  "legacyAST": {
+    "absolutePath": "project:/contracts/interfaces/IMinionFactory.sol",
+    "exportedSymbols": {
+      "IMinionFactory": [
+        3210
+      ]
+    },
+    "id": 3211,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 3201,
+        "literals": [
+          "solidity",
+          "0.8",
+          ".9"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "32:22:21"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "IMinionFactory",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "id": 3210,
+        "linearizedBaseContracts": [
+          3210
+        ],
+        "name": "IMinionFactory",
+        "nameLocation": "66:14:21",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "documentation": {
+              "id": 3202,
+              "nodeType": "StructuredDocumentation",
+              "src": "85:272:21",
+              "text": " Deploys a new minion contract for the given owner.\n Passes msg.sender as the creator and the co-owner of the minion\n @param owner - The address of the real owner of the contract\n @return minion - The address of the newly deployed minion contract"
+            },
+            "functionSelector": "c63300a5",
+            "id": 3209,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "spawn",
+            "nameLocation": "369:5:21",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3205,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3204,
+                  "mutability": "mutable",
+                  "name": "owner",
+                  "nameLocation": "383:5:21",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3209,
+                  "src": "375:13:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3203,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "375:7:21",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "374:15:21"
+            },
+            "returnParameters": {
+              "id": 3208,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3207,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3209,
+                  "src": "407:7:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3206,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "407:7:21",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "406:9:21"
+            },
+            "scope": 3210,
+            "src": "360:56:21",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 3211,
+        "src": "56:362:21",
+        "usedErrors": []
+      }
+    ],
+    "src": "32:387:21"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.9+commit.e5eed63a.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.3",
+  "updatedAt": "2021-12-13T02:53:10.686Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {
+      "spawn(address)": {
+        "params": {
+          "owner": "- The address of the real owner of the contract"
+        },
+        "returns": {
+          "_0": "minion - The address of the newly deployed minion contract"
+        }
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "spawn(address)": {
+        "notice": "Deploys a new minion contract for the given owner. Passes msg.sender as the creator and the co-owner of the minion"
+      }
+    },
+    "version": 1
+  }
+}
