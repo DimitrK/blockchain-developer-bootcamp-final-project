@@ -5,5 +5,8 @@
           "@/*": ["./app/*"]
       },
       "allowJs": true
-  }
+  },
+  "exclude": [
+    "./build/**/*"
+  ]
 }
