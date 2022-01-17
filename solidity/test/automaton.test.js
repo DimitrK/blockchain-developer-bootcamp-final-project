@@ -1,16 +1,48 @@
 import {catchRevert} from './support/assertRevert';
-import {assertEvent} from './support/assertEvent';
+import {assertEvent, eventValueSelector} from './support/assertEvent';
 import {constants} from '@openzeppelin/test-helpers';
 const {ZERO_BYTES32, ZERO_ADDRESS} = constants;
 const Automaton = artifacts.require('../contracts/Automaton.sol');
 const MinionFactory = artifacts.require('../contracts/MinionFactory.sol');
-const SimpleStorage = artifacts.require('../contracts/SimpleStorage.sol');
+const SimpleStorage = artifacts.require('../contracts/test-helpers/SimpleStorage.sol');
 const BN = web3.utils.BN;
 const oracle = '0x7940765F07e759ec22994acB3c392FBdcd9c2829';
 
 const getAbiDefinition = (contract, matcher = {}) => {
   return contract.abi.find(def => Object.keys(matcher).every(k => def[k] === matcher[k]));
 };
+
+const calculateTxGas = ({gas: estimateGas = 0, payable} = {}) => {
+  if (Number(estimateGas) <= 0) {
+    return '0';
+  }
+
+  const BN = web3.utils.BN;
+  const isPayable = !!payable;
+  const bnStipendGas = new BN(2300);
+  const bnTransferGas = new BN(21000);
+  const bnEstimateGas = new BN(estimateGas);
+
+  const totalGas = bnEstimateGas
+    .add(bnStipendGas)
+    .add(isPayable ? bnTransferGas : new BN(0))
+    .toString();
+  
+  return totalGas;
+};
+
+const calculatePayableAmount = ({payable = '0', gas: estimateGas, gasPrice} = {}) => {
+  const BN = web3.utils.BN;
+  const fee = new BN('160000000000001');
+
+  const bnPayableAmount = new BN(payable);
+  const bnGas = new BN(calculateTxGas({gas: estimateGas, payable}));
+  const bnGasCost = bnGas.mul(new BN(gasPrice));
+  const bnTotalPayableAmount = bnPayableAmount.add(fee).add(bnGasCost).toString();
+
+  return bnTotalPayableAmount;
+};
+
 
 contract('Automaton', accounts => {
   const creatorAddress = accounts[0];
@@ -49,9 +81,48 @@ contract('Automaton', accounts => {
     assert.deepEqual(new BN(newBalance), new BN(oneEther), 'automaton did not receive ether');
   });
 
-  it('starts with base fee of 150k gwei', async () => {
+  it('starts with base fee of 1.5M gwei', async () => {
     const fee = await automaton.fee.call();
     assert.equal(fee, web3.utils.toWei('1500000', 'gwei'));
+  });
+
+  describe('#setupAutomation', () => {
+
+    it('setups automation', async () => {
+      const simpleStorage = await SimpleStorage.new();
+      const amount = '0';
+      const gasPrice = web3.utils.toWei('2', 'wei');
+      const estimatedGas = calculateTxGas({})
+      const valueToSend = calculatePayableAmount({gas: estimatedGas, gasPrice})
+      const target = simpleStorage.address;
+      const comparator = Automaton.enums.Comparator.EQ;
+      const actionData = web3.eth.abi.encodeFunctionCall(getAbiDefinition(simpleStorage, {name: 'set'}), [9]);
+      const subject = web3.eth.abi.encodeParameter('uint256', 9);
+
+      
+      const tx = await automaton.setupAutomation(target, amount, gasPrice, actionData, subject, comparator, oracle, {value: oneEther});
+      const minionAddress = eventValueSelector(tx, 'MinionRegistered', 'minion');
+      const expectedAutomation = {
+        creator: creatorAddress,
+        minion: minionAddress,
+        action: {
+          data: actionData,
+          gasLimit: '499249999999935700',
+          gasPrice,
+          amount,
+          target
+        },
+        condition: {
+          oracle,
+          comparator,
+          subject
+        },
+        state: Automaton.enums.State.Open
+      }
+      assertEvent(tx, 'AutomationCreated', 'setting up an automation should emit an event')
+        .withValues([creatorAddress, 1, expectedAutomation], 'should fire with the specific values')
+        .withKeys(['creator', 'automationId', 'automation'], 'event should match the key names');
+    });
   });
 
   // describe('checkCondition', () => {

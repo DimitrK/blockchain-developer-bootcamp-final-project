@@ -81,9 +81,11 @@ contract BaseFeeContract is Ownable, ReentrancyGuard, Pausable {
     require(recipient != self, 'BaseFee: same address on both ends');
     require(amount >= 0, 'BaseFee: invalid amount value');
     require(msg.value >= amount.add(fee), 'BaseFee: not enough ether send to cover fee cost');
-    uint256 startBalance = self.balance;
-    Address.sendValue(recipient, amount);
-    assert(self.balance == startBalance - amount);
+    if (amount > 0) {
+      uint256 startBalance = self.balance;
+      Address.sendValue(recipient, amount);
+      assert(self.balance >= startBalance - amount);
+    }
   }
 
   function _calculateUsableGasFromAmount(uint256 gasPrice, uint256 sendAmount)
@@ -93,7 +95,7 @@ contract BaseFeeContract is Ownable, ReentrancyGuard, Pausable {
     returns (uint256 carriedGas)
   {
     require(msg.value > 0, 'BaseFee: insufficient funds');
-    require(gasPrice > 1, 'BaseFee: invalid gas price');
+    require(gasPrice > 0, 'BaseFee: invalid gas price');
 
     uint carriedGasCost = msg.value.sub(fee).sub(sendAmount); 
     carriedGas = carriedGasCost.div(gasPrice).sub(gasOverhead);

@@ -1,10 +1,14 @@
 //SPDX-License-Identifier: MIT
 pragma solidity 0.8.9;
 
-import './interfaces/IGanacheChainlinkClient.sol';
+// import './interfaces/IGanacheChainlinkClient.sol';
 import './interfaces/IMinionFactory.sol';
 import './interfaces/IMinion.sol';
 import './BaseFeeContract.sol';
+
+interface IOracleFeed {
+  function request() external view returns (bytes memory response);
+}
 
 contract Automaton is BaseFeeContract {
   using SafeMath for uint256;
@@ -24,7 +28,6 @@ contract Automaton is BaseFeeContract {
   }
 
   struct Condition {
-    bytes query;
     address oracle;
     Comparator comparator;
     bytes subject;
@@ -46,17 +49,6 @@ contract Automaton is BaseFeeContract {
     State state;
   }
 
-  // struct Automation {
-  //   address creator;
-  //   address target;
-  //   address minion;
-  //   bytes data;
-  //   uint256 gasLimit;
-  //   uint256 gasPrice;
-  //   uint256 amount;
-  //   State state;
-  // }
-
   IMinionFactory MINION_FACTORY;
   uint256 public autoId;
   uint256 public lastAutoIdChecked;
@@ -68,7 +60,7 @@ contract Automaton is BaseFeeContract {
    *  === === === === === Events === === === === === ===
    */
   event MinionRegistered(address indexed creator, address minion);
-  event AutomationCreated(address indexed creator, uint256 automationId);
+  event AutomationCreated(address indexed creator, uint256 automationId, Automation automation);
   event AutomationFailed(address indexed creator, uint256 automationId, bytes reason);
   event AutomationCompleted(address indexed creator, uint256 automationId);
   event AutomationValueForwarded(address indexed minion, uint256 automationId, uint256 amount);
@@ -129,52 +121,49 @@ contract Automaton is BaseFeeContract {
     address target,
     uint256 amount,
     uint256 gasPrice,
-    bytes memory data
+    bytes memory data,
+    bytes memory subject,
+    Comparator comparator,
+    address oracle
   ) public payable whenNotPaused validExternalAddress(target) returns (uint256) {
-    uint256 usableCarriedGas = _calculateUsableGasFromAmount(amount, gasPrice);
+    uint256 usableCarriedGas = _calculateUsableGasFromAmount(gasPrice, amount);
 
     address minion = _getOrRegisterMinion();
 
     autoId++;
 
-    Action action = Action({
+    Action memory action = Action({
       target: target,
       data: data,
       gasLimit: usableCarriedGas,
       gasPrice: gasPrice,
-      amount: amount,
+      amount: amount
     });
 
     automations[autoId] = Automation({
       creator: msg.sender,
       minion: minion,
       action: action,
+      condition: Condition({
+        oracle: oracle,
+        comparator: comparator,
+        subject: subject
+      }),
       state: State.Open
     });
 
-    emit AutomationCreated(msg.sender, autoId);
+    emit AutomationCreated(msg.sender, autoId, automations[autoId]);
 
     _forwardAutomationValue(amount, autoId);
 
     return autoId;
   }
 
-  // function _getChainlinkValue(address aggregatorAddress) internal validExternalAddress(aggregatorAddress) returns (int256) {
-  //   AggregatorV3Interface feed = AggregatorV3Interface(aggregatorAddress);
-  //   (uint80 roundID, int256 price, uint256 startedAt, uint256 timeStamp, uint80 answeredInRound) = priceFeed
-  //     .latestRoundData();
-
-  //   return price;
-  // }
-
-  // function performOracleRequest() public {
-  //   IGanacheChainlinkClient(client).request(oracle, job);
-  // }
 
   function checkCondition(
     address oracle,
     Comparator comparator,
-    bytes subject
+    bytes memory subject
   ) public view returns (bool) {
     require(oracle != address(this), 'Automaton: invalid oracle address');
     require(oracle != address(0), 'Automaton: zero oracle address');
@@ -183,25 +172,25 @@ contract Automaton is BaseFeeContract {
     
     // It is expected to receive bytes as response. If lt/gt condition check needed
     // will be casted to int256
-    bytes response = IOracleFeed(oracle).request();
+    bytes memory response = IOracleFeed(oracle).request();
 
     if (comparator == Comparator.EQ) {
-      if (subject == response) {
+      if (keccak256(subject) == keccak256(response)) {
         return true;
       }
       return false;
     }
 
     if (comparator == Comparator.NOT) {
-      if (subject != response) {
+      if (keccak256(subject) != keccak256(response)) {
         return true;
       }
       return false;
     }
 
     if (comparator == Comparator.GT) {
-      int responseDecoded = abi.decode(responseEncoded);
-      int subjectDecoded = abi.decode(subject);
+      int responseDecoded = abi.decode(response, (int));
+      int subjectDecoded = abi.decode(subject, (int));
 
       if (subjectDecoded > responseDecoded) {
         return true;
@@ -210,8 +199,8 @@ contract Automaton is BaseFeeContract {
     }
 
     if (comparator == Comparator.LT) {
-      int responseDecoded = abi.decode(responseEncoded);
-      int subjectDecoded = abi.decode(subject);
+      int responseDecoded = abi.decode(response, (int));
+      int subjectDecoded = abi.decode(subject, (int));
       
       if (subjectDecoded < responseDecoded) {
         return true;
@@ -231,12 +220,12 @@ contract Automaton is BaseFeeContract {
   {
     Automation storage automation = automations[_autoId];
 
-    require(tx.gasprice <= automation.gasPrice);
+    require(tx.gasprice <= automation.action.gasPrice);
 
     (executed, result) = IMinion(payable(automation.minion)).executeOrder({
       target: automation.action.target,
       data: automation.action.data,
-      gas: automation.action.gasLimit.mul(automation.gasPrice),
+      gas: automation.action.gasLimit.mul(automation.action.gasPrice),
       value: automation.action.amount
     });
 
