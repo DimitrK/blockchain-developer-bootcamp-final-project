@@ -43,6 +43,15 @@ module.exports = {
       network_id: 1337,
       gasPrice: 134000000000,
       gas: 4612388
+    },
+    // used only to differentiate between development/test on migration.
+    // Store newly deployed contract address or not to the client side
+    test: {
+      host: 'localhost',
+      port: 8546,
+      network_id: 1337,
+      gasPrice: 134000000000,
+      gas: 4612388
     }
   },
   mocha: {

@@ -27,6 +27,10 @@ module.exports = async function(deployer, network) {
   await deployer.deploy(Automaton);
   const automaton = await Automaton.deployed();
   await automaton.initialize(minionFactory.address, 1500000 * 10**9); // 1.500.000gwei fee
+  
+  if (network === 'test' && contracts.automaton && contracts.automaton[network]) {
+    return;
+  }
 
   const address = automaton.address;
   contracts.automaton = {...contracts.automaton, [network]: address};
