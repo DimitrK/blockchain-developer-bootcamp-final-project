@@ -4,7 +4,8 @@
   "workspaces": [
     "client",
     "solidity",
-    "chainlink"
+    "chainlink",
+    "graph"
   ],
   "version": "0.0.1",
   "description": "Ethereum boilerplate. Solidity, Webpack, React",

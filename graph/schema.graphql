@@ -1,0 +1,40 @@
+enum State {
+  Open
+  Forwarded
+  Completed
+  Closed
+  Failed
+}
+
+enum Comparator {
+  EQ
+  GT
+  NOT
+  LT
+}
+
+type Automation @entity {
+  id: ID!
+  creator: Bytes!
+  minion: Bytes!
+  action: Action
+  condition: Condition
+  state: State
+}
+
+type Action @entity {
+  id: ID!
+  data: Bytes!
+  gasLimit: BigInt!
+  gasPrice: BigInt!
+  amount: BigInt!
+  target: Bytes!
+}
+
+type Condition @entity {
+  id: ID!
+  query: Bytes!
+  oracle: Bytes!
+  comparator: Comparator
+  subject: Bytes!
+}

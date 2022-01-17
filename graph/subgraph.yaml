@@ -1,0 +1,32 @@
+specVersion: 0.0.2
+description: Gravatar for Ethereum
+repository: https://github.com/graphprotocol/example-subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Automaton
+    network: mainnet
+    source:
+      address: '0xe8451a03e77B2746C8D7cba7B8Aba1e6E4CDB1ea'
+      abi: Automaton
+      startBlock: 1291
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Automation
+        - Condition
+        - Action
+      abis:
+        - name: Automaton
+          file: ../client/app/contracts/Automaton.json
+      eventHandlers:
+        - event: AutomationCreated(indexed address,uint256,(address,address,(bytes,uint256,uint256,uint256,address),(bytes,address,uint8,bytes),uint8))
+          handler: handleNewAutomation
+        - event: AutomationFailed(indexed address,uint256,bytes)
+          handler: handleUpdateAutomation
+        - event: AutomationCompleted(indexed address,uint256)
+          handler: handleUpdateAutomation
+      file: ./src/mapping.ts

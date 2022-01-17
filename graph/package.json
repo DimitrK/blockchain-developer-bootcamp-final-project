@@ -1,0 +1,25 @@
+{
+  "name": "@athens/graph",
+  "version": "0.1.0",
+  "scripts": {
+    "create": "graph create graph/automaton --node https://api.thegraph.com/deploy/",
+    "create-local": "graph create graph/automaton --node http://127.0.0.1:8020",
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy graph/automaton --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
+    "deploy-local": "graph deploy graph/automaton --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
+    "start": "docker-compose up",
+    "init": "graph init --product hosted-service --from-example"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.23.2",
+    "@graphprotocol/graph-ts": "^0.23.1"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "babel-register": "^6.26.0",
+    "truffle": "^5.0.4",
+    "truffle-contract": "^4.0.5",
+    "truffle-hdwallet-provider": "^1.0.4"
+  }
+}
