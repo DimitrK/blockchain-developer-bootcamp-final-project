@@ -58,7 +58,7 @@ oracle) passing the parameters required for the function of the contract and pay
 desires. The amount payed gets subtracted from the wallet and the UI informed presenting the new balance to the user
 
 ## Installation
-- Use Node v12.22.x
+- Use Node v16.x.x
 - Clone the repo and run `yarn`
 - Add a `.env` file under `./client` with your etherscan API keys
 ```
